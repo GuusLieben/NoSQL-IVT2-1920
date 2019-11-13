@@ -1,12 +1,12 @@
-const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const indexRouter = require('./routes/index');
-
+// Initiate app and pass it to router management
 const app = express();
+require('./routes/routes.bin').app(app);
+
 const port = process.env.PORT || 3000;
 
 // General configuration
@@ -24,15 +24,16 @@ app.use((req, res, next) => {
     next();
 });
 
-// Routers
-app.use('/', indexRouter);
-
 // Error handlers
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     res.json({error: next})
 });
 
 // Verbose logging on start
 app.listen(port, () => console.log('Application started on port ' + port));
 
-module.exports = app;
+module.exports = {
+    app: app,
+    log: logger,
+
+};
