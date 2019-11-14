@@ -1,4 +1,4 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
 
 router.get('/:username', (req, res, next) => {
@@ -14,7 +14,7 @@ router.post('/', (req, res, next) => {
    // Unique username, require password
 });
 
-router.update('/:username', (req, res, next) => {
+router.put('/:username', (req, res, next) => {
    // Look for username, oldPass, newPass
    // Require oldPass to be equal to user pass, if not return error status 401
 });
@@ -22,4 +22,4 @@ router.update('/:username', (req, res, next) => {
 router.delete('/:username', (req, res, next) => {
     // Look for username, password
     // Require password to be equal to user pass, if not return error status 401
-})
+});

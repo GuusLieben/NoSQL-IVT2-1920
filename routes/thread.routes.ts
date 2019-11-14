@@ -1,4 +1,4 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
 
 // #MongoDB
@@ -7,7 +7,7 @@ router.post('/', (req, res, next) => {
     // Username, title, content (no markup)
 });
 
-router.update('/:id', (req, res, next) => {
+router.put('/:id', (req, res, next) => {
     // New content
     // Error title update : 406 (Not Acceptable)
 });

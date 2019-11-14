@@ -1,8 +1,8 @@
-const express = require('express');
+import * as express from 'express';
 const router = express.Router();
 
 router.get('/', function (req, res, next) {
     res.json({title: 'NoSQL IVT2 1920'});
 });
 
-module.exports = router;
+export default router;
