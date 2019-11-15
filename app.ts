@@ -1,22 +1,18 @@
-import * as cookieParser from "cookie-parser";
-import * as logger from "morgan";
-
+import * as cookieParser from 'cookie-parser';
+import * as morgan from 'morgan';
 import * as express from 'express';
 import {Application} from 'express';
+import * as bodyParser from "body-parser";
 
-const bodyParser = require('body-parser');
-
-const app: Application = express();
-
-app.use(bodyParser.json());
+// Exports
+export const app: Application = express();
 
 // Initiate app and pass it to router management
 require('./routes/routes.bin').app(app);
 
-const port = 3000;
-
 // General configuration
-app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -39,11 +35,6 @@ app.use((err: any, req: any, res: any, next: any) => {
     res.json({error: err})
 });
 
-// Verbose logging on start
-app.listen(port, () => console.log('Application started on port ' + port));
-
-export default {
-    app: app,
-    log: logger,
-
-};
+// Initiate database and application services
+const service = require('./services/service');
+service.init();
