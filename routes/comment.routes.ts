@@ -1,5 +1,6 @@
 import * as express from 'express';
 const router = express.Router();
+import {mongoRepository} from '../services/service'
 
 // #MongoDB
 

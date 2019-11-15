@@ -12,6 +12,7 @@
     "http-errors": "~1.6.3",
     "mongoose": "^5.7.10",
     "morgan": "~1.9.1",
+    "neo4j": "^2.0.0-RC2",
     "pug": "2.0.0-beta11",
     "ts-node": "^8.5.0",
     "typescript": "^3.7.2"
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
     "@types/mongoose": "^5.5.31",
-    "@types/morgan": "^1.7.37"
+    "@types/morgan": "^1.7.37",
+    "@types/neo4j": "^2.0.2"
   }
 }
