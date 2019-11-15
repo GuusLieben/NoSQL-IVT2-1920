@@ -2,7 +2,8 @@ export default {
     app: {
         port: 4420
     },
-    mongo: {
-        connectionString: 'mongodb://localhost:27017/studdit'
+    database: {
+        mongo: 'mongodb://localhost:27017/studdit',
+        neo4j: 'http://username:password@localhost:7474'
     }
 }

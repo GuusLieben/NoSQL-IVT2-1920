@@ -15,7 +15,7 @@ export let mongoDb: any;
 export let neo4jDb: any;
 
 export function init() {
-    mongoDb = mongo.connect(environment.mongo.connectionString, (err: any, response: any) => {
+    mongoDb = mongo.connect(environment.database.mongo, (err: any, response: any) => {
         if (err) {
             console.log('An error occurred while connecting to MongoDb :\n' + err);
         } else {
@@ -27,7 +27,7 @@ export function init() {
 
 app.on('mongoConnected', () => {
     try {
-        neo4jDb = new GraphDatabase('http://username:password@localhost:7474');
+        neo4jDb = new GraphDatabase(environment.database.neo4j);
     } catch (err) {
         console.log('An error occurred while connecting to Neo4j :\n' + err);
     }
