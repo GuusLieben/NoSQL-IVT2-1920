@@ -2,3 +2,4 @@
 /node_modules
 /*.iml
 src/environment.ts
+*/.DS_Store
