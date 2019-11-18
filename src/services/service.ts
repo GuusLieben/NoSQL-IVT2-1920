@@ -5,7 +5,7 @@ import {RepositoryInterface} from './repository.interface';
 import {RepositoryMongodb} from './repository.mongodb';
 import {RepositoryNeo4j} from './repository.neo4j';
 import {Connection} from 'mongoose';
-
+import * as neo4j from 'neo4j-driver';
 // == Exported constants
 // Repositories, threads are handled through MongoDb, friends are handled through Neo4j (diff. imp. allowed)
 export const threadRepository: RepositoryInterface = new RepositoryMongodb();
@@ -13,13 +13,11 @@ export const friendRepository: RepositoryInterface = new RepositoryNeo4j();
 // First check the process environment (Heroku), then the configuration, only then use hardcoded
 export const port = process.env.PORT || environment.app.port || 5000;
 // For repositories
+export let neo4jDb: neo4j.v1.Session;
 export let mongoDb: Connection;
 
 // == NodeJS style imported packages
 const mongoose = require('mongoose');
-const neo = require('neo4j-driver').v1;
-export const neo4JDriver = neo.driver(environment.database.neo4j.uri,
-    neo.auth.basic(environment.database.neo4j.user, environment.database.neo4j.password));
 
 export async function init() {
     // Either emits 'error' which logs the error and closes the server
@@ -51,39 +49,25 @@ export async function init() {
 // Called once MongoDb is connected
 app.on('mongoConnected', async () => {
 
+    // TODO : Fix connection check below
 
-    // Tries to connect to the Neo4J DB to check if the connection is valid
-    // Creates and deletes the person Bob as a test, throws errors if this fails
-    const createSession = neo4JDriver.session();
-    await createSession
-        .run("CREATE (n:Person {name:'Bob'}) RETURN n.name")
-        .then((result: { records: any[]; }) => {
-            result.records.forEach(async record => {
-
-                console.log(record);
-
-                const deleteSession = neo4JDriver.session();
-                await deleteSession
-                    .run("MATCH (n { name: 'Bob' }) DETACH DELETE n")
-                    .then(console.log("\nDeleted Bob succesfully"))
-                    .catch(function (error: any) {
-                        console.log(error);
-                        process.exit(130);
-                    });
-
-                deleteSession.close();
-            });
-
-            createSession.close();
-        })
-        .catch(function (error: any) {
-            console.log(error);
-            process.exit(130);
-        });
+    try {
+        neo4jDb = await neo4j.v1.driver(
+            environment.database.neo4j.uri,
+            neo4j.v1.auth.basic(environment.database.neo4j.user, environment.database.neo4j.password)
+        ).session();
+    } catch (err) {
+        console.log(err);
+        process.exit(130);
+    }
 
     // If the object is connected, emit the neo4j connected event
-    console.log('> Connected to Neo4J database');
-    app.emit('neo4jConnected');
+    if (neo4jDb) {
+        console.log('> Connected to Neo4J databse');
+        app.emit('neo4jConnected');
+    }
+
+    // TODO : Above
 
 });
 

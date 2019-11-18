@@ -1,13 +1,11 @@
 import {RepositoryInterface} from "./repository.interface";
 import {Types} from "mongoose";
-import ObjectId = Types.ObjectId;
 import {User} from "../models/user";
 import {Result} from "../models/result";
 import {Comment} from "../models/comment";
 import {Friends} from "../models/friends";
 import {Thread} from "../models/thread";
-
-import {mongoDb} from './service';
+import ObjectId = Types.ObjectId;
 
 export class RepositoryMongodb implements RepositoryInterface {
 

@@ -1,3 +1,4 @@
-export class User {
-
+export interface User {
+    email: String;
+    password: String;
 }
