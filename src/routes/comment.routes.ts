@@ -1,6 +1,6 @@
 import * as express from 'express';
 const router = express.Router();
-import {mongoRepository} from '../services/service'
+import {threadRepository} from '../services/service'
 
 // #MongoDB
 

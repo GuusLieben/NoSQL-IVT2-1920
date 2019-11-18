@@ -1,14 +1,14 @@
 const mongo = require('mongoose');
-const Schema = mongo.Schema;
+const SchemaMongoDb = mongo.Schema;
 
-const Review = new Schema({
+const Review = new SchemaMongoDb({
   text: String,
   rating: {type: Number, required: true, min: 0, max: 5},
-  user: Schema.Types.ObjectId
+  user: SchemaMongoDb.Types.ObjectId
 });
 
-// Product Schema
-const Product = new Schema({
+// Product SchemaMongoDb
+const Product = new SchemaMongoDb({
   name: {type: String, required: true},
   description: String,
   price: {type: Number, required: true, min: 0},
@@ -23,8 +23,8 @@ Product.virtual('average_rating').get(function () {
     / this.reviews.length;
 });
 
-// User Schema
-const User = new Schema({
+// User SchemaMongoDb
+const User = new SchemaMongoDb({
   name: {type: String, required: true},
   bought: [{type: Product, ref: 'product', default: []}]
 });

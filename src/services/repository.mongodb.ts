@@ -7,7 +7,10 @@ import {Comment} from "../models/comment";
 import {Friends} from "../models/friends";
 import {Thread} from "../models/thread";
 
+import {mongoDb} from './service';
+
 export class RepositoryMongodb implements RepositoryInterface {
+
     createFriends(user1: User, user2: User): Result<Boolean> {
         throw 'Unsupported operation';
     }
