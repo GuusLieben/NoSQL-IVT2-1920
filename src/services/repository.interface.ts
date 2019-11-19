@@ -16,7 +16,7 @@ export interface RepositoryInterface {
     // Friends
     createFriends(user1: User, user2: User): Promise<Result<Boolean>>,
     deleteFriends(user1: User, user2: User): Promise<Result<any>>,
-    // getFriends(username: String): Promise<Result<Array<Friends>>>,
+    getFriends(username: String): Promise<Result<string[]>>,
 
     // Threads
     // createThread(user: User, title: String, content: String): Promise<Result<Boolean>>,

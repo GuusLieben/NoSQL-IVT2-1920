@@ -32,11 +32,32 @@ export class RepositoryNeo4j implements RepositoryInterface {
         return new Result<Boolean>(undefined, true);
     }
 
+    async getFriends(username: String): Promise<Result<string[]>>{
+        const session = neo4JDriver.session();
+        let results: Array<string>;
+        results = [];
+
+        await session.run(queries.getFriends(username))
+            .then((result: { records: any[]; }) => {
+                result.records.forEach(async record => {
+                    results.push(record);
+                })
+            })
+            .catch(function (error: any) {
+                logger.error(error);
+                process.exit(130);
+                session.close();
+                return new Result<Boolean>(error, false);
+            });
+        session.close();
+        return new Result<string[]>(undefined, results);
+    }
+
     async deleteFriends(user1: User, user2: User): Promise<Result<any>> {
         const session = neo4JDriver.session();
 
         await session.run(queries.deleteFriendsRelationship(user1, user2))
-            .then(async (result: undefined) => {
+            .then(async (result: any) => {
 
                 const deleteNodeSession = neo4JDriver.session();
                 await deleteNodeSession.run(queries.deleteFriendsNodes)
@@ -83,10 +104,6 @@ export class RepositoryNeo4j implements RepositoryInterface {
     // }
     //
     // getCommentsForThread(threadId: ObjectId): Promise<Result<Array<Comment>>> {
-    //     return undefined;
-    // }
-    //
-    // getFriends(username: String): Promise<Result<Array<Friends>>> {
     //     return undefined;
     // }
     //

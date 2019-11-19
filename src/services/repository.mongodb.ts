@@ -45,8 +45,8 @@ export class RepositoryMongodb implements RepositoryInterface {
         throw 'Unsupported operation';
     }
 
-    getFriends(username: String): Result<Array<Friends>> {
-        throw 'Unsupported operation';
+    getFriends(username: String): Promise<Result<string[]>> {
+        throw new Error('Method not implemented.');
     }
 
     getThread(threadId: ObjectId): Result<Thread> {
