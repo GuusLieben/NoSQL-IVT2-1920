@@ -1,14 +1,14 @@
-import {Types} from "mongoose";
+import {Types} from 'mongoose';
 import ObjectId = Types.ObjectId;
-import {Comment} from "../models/comment";
-import {User} from "../models/user";
-import {Thread} from "../models/thread";
-import {Result} from "../models/result";
-import {Friends} from "../models/friends";
-import {RepositoryInterface} from "./repository.interface";
-import {neo} from "./service";
-import {neo4JDriver} from "./service";
-import {queries} from "./queries.neo4j";
+import {Comment} from '../models/comment';
+import {User} from '../models/user';
+import {Thread} from '../models/thread';
+import {Result} from '../models/result';
+import {Friends} from '../models/friends';
+import {RepositoryInterface} from './repository.interface';
+import {neo} from './service';
+import {neo4JDriver} from './service';
+import {queries} from './queries.neo4j';
 
 export class RepositoryNeo4j implements RepositoryInterface {
     async createFriends(user1: User, user2: User): Promise<Result<Boolean>> {

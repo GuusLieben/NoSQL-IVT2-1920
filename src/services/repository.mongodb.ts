@@ -1,16 +1,16 @@
-import {RepositoryInterface} from "./repository.interface";
-import {Types} from "mongoose";
-import {User} from "../models/user";
-import {Result} from "../models/result";
-import {Comment} from "../models/comment";
-import {Friends} from "../models/friends";
-import {Thread} from "../models/thread";
+import {RepositoryInterface} from './repository.interface';
+import {Types} from 'mongoose';
+import {User} from '../models/user';
+import {Result} from '../models/result';
+import {Comment} from '../models/comment';
+import {Friends} from '../models/friends';
+import {Thread} from '../models/thread';
 import ObjectId = Types.ObjectId;
 
 export class RepositoryMongodb implements RepositoryInterface {
 
     createFriends(user1: User, user2: User): Promise<Result<Boolean>> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     createThread(user: User, title: String, content: String): Result<Boolean> {

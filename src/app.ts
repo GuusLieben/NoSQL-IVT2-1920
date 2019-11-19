@@ -2,7 +2,7 @@ import * as cookieParser from 'cookie-parser';
 import * as morgan from 'morgan';
 import * as express from 'express';
 import {Application} from 'express';
-import * as bodyParser from "body-parser";
+import * as bodyParser from 'body-parser';
 
 // Exports
 export const app: Application = express();

@@ -5,8 +5,7 @@ import {RepositoryInterface} from './repository.interface';
 import {RepositoryMongodb} from './repository.mongodb';
 import {RepositoryNeo4j} from './repository.neo4j';
 import {Connection} from 'mongoose';
-import {User} from "../models/user";
-import {queries} from "./queries.neo4j";
+import {queries} from './queries.neo4j';
 
 // == Exported constants
 // Repositories, threads are handled through MongoDb, friends are handled through Neo4j (diff. imp. allowed)
@@ -57,9 +56,9 @@ app.on('mongoConnected', async () => {
     const createSession = neo4JDriver.session();
     await createSession
         .run(queries.createTestObject)
-        .then((result: { records: any[]; }) => {
-            result.records.forEach(async record => {
-                console.log(record);
+        .then(async (result: { records: any[]; }) => {
+
+            for (const record of result.records) {
                 const deleteSession = neo4JDriver.session();
                 await deleteSession
                     .run(queries.deleteTestObject)
@@ -67,21 +66,19 @@ app.on('mongoConnected', async () => {
                         console.log(error);
                         process.exit(130);
                     });
-                console.log('\n> Succesfully deleted Bob')
+                console.log('\n> Verified connection and RWX permissions for Neo4J');
                 deleteSession.close();
-            });
+            }
 
             createSession.close();
+
+            console.log('> Connected to Neo4J database\n');
+            app.emit('neo4jConnected');
         })
         .catch(function (error: any) {
             console.log(error);
             process.exit(130);
         });
-
-    // If the object is connected, emit the neo4j connected event
-    console.log('> Connected to Neo4J database\n');
-    app.emit('neo4jConnected');
-
 });
 
 // Once all databases responded, start listening for client requests

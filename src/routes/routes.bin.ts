@@ -1,6 +1,6 @@
-import {Application} from "express";
+import {Application} from 'express';
 
-import indexRouter from "./index";
+import indexRouter from './index';
 
 export function app(app: Application) {
     app.use('/', indexRouter);

@@ -1,4 +1,4 @@
-import {User} from "../models/user";
+import {User} from '../models/user';
 
 export const queries = {
     createFriendsQuery: (user1: User, user2: User) => "MERGE (user1: User {name: '" + user1.name + "'}) MERGE (user2: User {name: '" + user2.name + "'}) MERGE (user1)-[:Friends]->(user2) MERGE (user2)-[:Friends]->(user1) RETURN user1, user2",

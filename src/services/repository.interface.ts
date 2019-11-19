@@ -1,10 +1,10 @@
-import {Types} from "mongoose";
+import {Types} from 'mongoose';
 import ObjectId = Types.ObjectId;
-import {Comment} from "../models/comment";
-import {User} from "../models/user";
-import {Thread} from "../models/thread";
-import {Result} from "../models/result";
-import {Friends} from "../models/friends";
+import {Comment} from '../models/comment';
+import {User} from '../models/user';
+import {Thread} from '../models/thread';
+import {Result} from '../models/result';
+import {Friends} from '../models/friends';
 
 export interface RepositoryInterface {
     // Comments
