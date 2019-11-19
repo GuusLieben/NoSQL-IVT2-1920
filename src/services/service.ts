@@ -23,7 +23,7 @@ export const neo4JDriver = neo.driver(environment.database.neo4j.uri,
     neo.auth.basic(environment.database.neo4j.user, environment.database.neo4j.password));
 
 export async function init() {
-    logger.color('yellow').log('⚠️ Initiating application service')
+    logger.color('yellow').log('⚠️ Initiating application service');
 
     // Either emits 'error' which logs the error and closes the server
     // Or emits 'open' which emits 'mongoConnected' to Express
@@ -85,4 +85,6 @@ app.on('mongoConnected', async () => {
 });
 
 // Once all databases responded, start listening for client requests
-app.on('neo4jConnected', () => app.listen(port, () => logger.color('blue').log('> Application started on port ' + port)));
+app.on('neo4jConnected', () => app.listen(port, () => {
+    logger.color('yellow').log('⚠️ Application started on port ' + port);
+}));

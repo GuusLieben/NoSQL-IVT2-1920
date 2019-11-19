@@ -9,15 +9,16 @@ export const logger = require('node-color-log');
 // Exports
 export const app: Application = express();
 
-// Initiate app and pass it to router management
-require('./routes/routes.bin').app(app);
-
 // General configuration
 app.use(bodyParser.json());
 app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
+
+
+// Initiate app and pass it to router management
+require('./routes/routes.bin').app(app);
 
 // Request filters
 app.use((req, res, next) => {
@@ -26,6 +27,11 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     next();
+});
+
+app.all('*', (req, res) => {
+    logger.color('yellow').italic().log('User requested ' + req.path + ' but it was not found on the server');
+   res.status(404).json({error: 'Endpoint unavailable'});
 });
 
 // Error handlers

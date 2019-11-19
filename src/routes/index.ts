@@ -1,6 +1,5 @@
 import * as express from 'express';
 const router = express.Router();
-import {threadRepository} from '../services/service'
 
 router.get('/', function (req, res, next) {
     // res.json(repository.getComments());

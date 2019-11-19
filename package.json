@@ -24,6 +24,7 @@
     "@types/cookie-parser": "^1.4.2",
     "@types/mongoose": "^5.5.31",
     "@types/morgan": "^1.7.37",
-    "@types/neo4j": "^2.0.2"
+    "@types/neo4j": "^2.0.2",
+    "nodemon": "^1.19.4"
   }
 }
