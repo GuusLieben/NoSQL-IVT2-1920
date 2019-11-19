@@ -12,14 +12,40 @@ import {queries} from './queries.neo4j';
 import {logger} from "../app";
 
 export class RepositoryNeo4j implements RepositoryInterface {
+
     async createFriends(user1: User, user2: User): Promise<Result<Boolean>> {
         const session = neo4JDriver.session();
 
-        await session.run(queries.createFriendsQuery(user1, user2))
+        await session.run(queries.createFriends(user1, user2))
             .then((result: { records: any[]; }) => {
                 result.records.forEach(async record => {
                     logger.color('blue').log(record);
                 })
+            })
+            .catch(function (error: any) {
+                logger.error(error);
+                process.exit(130);
+                session.close();
+                return new Result<Boolean>(error, false);
+            });
+        session.close();
+        return new Result<Boolean>(undefined, true);
+    }
+
+    async deleteFriends(user1: User, user2: User): Promise<Result<any>> {
+        const session = neo4JDriver.session();
+
+        await session.run(queries.deleteFriendsRelationship(user1, user2))
+            .then(async (result: undefined) => {
+
+                const deleteNodeSession = neo4JDriver.session();
+                await deleteNodeSession.run(queries.deleteFriendsNodes)
+                    .catch(function (error: any) {
+                        logger.error(error);
+                        process.exit(130);
+                    })
+                deleteNodeSession.close();
+
             })
             .catch(function (error: any) {
                 logger.error(error);
@@ -43,9 +69,6 @@ export class RepositoryNeo4j implements RepositoryInterface {
     //     return undefined;
     // }
     //
-    // deleteFriends(user1: User, user2: User): Promise<Result<Boolean>> {
-    //     return undefined;
-    // }
     //
     // deleteThread(threadId: ObjectId): Promise<Result<Boolean>> {
     //     return undefined;

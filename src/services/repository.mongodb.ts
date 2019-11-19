@@ -25,8 +25,8 @@ export class RepositoryMongodb implements RepositoryInterface {
         throw 'Unsupported operation';
     }
 
-    deleteFriends(user1: User, user2: User): Result<Boolean> {
-        throw 'Unsupported operation';
+    deleteFriends(user1: User, user2: User): Promise<Result<Boolean>> {
+        throw new Error('Method not implemented.');
     }
 
     deleteThread(threadId: ObjectId): Result<Boolean> {

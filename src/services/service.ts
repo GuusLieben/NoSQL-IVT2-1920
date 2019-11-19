@@ -6,6 +6,7 @@ import {RepositoryMongodb} from './repository.mongodb';
 import {RepositoryNeo4j} from './repository.neo4j';
 import {Connection} from 'mongoose';
 import {queries} from './queries.neo4j';
+import {User} from "../models/user";
 
 // == Exported constants
 // Repositories, threads are handled through MongoDb, friends are handled through Neo4j (diff. imp. allowed)
@@ -88,3 +89,4 @@ app.on('mongoConnected', async () => {
 app.on('neo4jConnected', () => app.listen(port, () => {
     logger.color('yellow').log('⚠️ Application started on port ' + port);
 }));
+
