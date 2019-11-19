@@ -4,6 +4,8 @@ import * as express from 'express';
 import {Application} from 'express';
 import * as bodyParser from 'body-parser';
 
+export const logger = require('node-color-log');
+
 // Exports
 export const app: Application = express();
 

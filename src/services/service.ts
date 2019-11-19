@@ -1,5 +1,5 @@
 // == TS style imported packages
-import {app} from '../app';
+import {app, logger} from '../app';
 import environment from '../environment';
 import {RepositoryInterface} from './repository.interface';
 import {RepositoryMongodb} from './repository.mongodb';
@@ -23,6 +23,8 @@ export const neo4JDriver = neo.driver(environment.database.neo4j.uri,
     neo.auth.basic(environment.database.neo4j.user, environment.database.neo4j.password));
 
 export async function init() {
+    logger.color('yellow').log('⚠️ Initiating application service')
+
     // Either emits 'error' which logs the error and closes the server
     // Or emits 'open' which emits 'mongoConnected' to Express
     await mongoose.connect(environment.database.mongo.uri, {
@@ -37,13 +39,14 @@ export async function init() {
 
     // Error handle, end the process if we can't connect
     mongoDb.on('error', (error: any) => {
-        console.log(error);
+        logger.error(error);
+        logger.error(error);
         process.exit(130);
     });
 
     // Connection handle, proceed to next step if we're connected
     if (this.mongoDb.readyState > 0) {
-        console.log('> Connected to MongoDb database');
+        logger.color('blue').log('> Connected to MongoDb database\n');
         app.emit('mongoConnected');
     }
 }
@@ -63,23 +66,23 @@ app.on('mongoConnected', async () => {
                 await deleteSession
                     .run(queries.deleteTestObject)
                     .catch(function (error: any) {
-                        console.log(error);
+                        logger.error(error);
                         process.exit(130);
                     });
-                console.log('\n> Verified connection and RWX permissions for Neo4J');
+                logger.color('magenta').log('> Verified connection and RWX permissions for Neo4J');
                 deleteSession.close();
             }
 
             createSession.close();
 
-            console.log('> Connected to Neo4J database\n');
+            logger.color('blue').log('> Connected to Neo4J database\n');
             app.emit('neo4jConnected');
         })
         .catch(function (error: any) {
-            console.log(error);
+            logger.error(error);
             process.exit(130);
         });
 });
 
 // Once all databases responded, start listening for client requests
-app.on('neo4jConnected', () => app.listen(port, () => console.log('> Application started on port ' + port)));
+app.on('neo4jConnected', () => app.listen(port, () => logger.color('blue').log('> Application started on port ' + port)));

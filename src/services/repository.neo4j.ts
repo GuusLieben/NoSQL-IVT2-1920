@@ -9,6 +9,7 @@ import {RepositoryInterface} from './repository.interface';
 import {neo} from './service';
 import {neo4JDriver} from './service';
 import {queries} from './queries.neo4j';
+import {logger} from "../app";
 
 export class RepositoryNeo4j implements RepositoryInterface {
     async createFriends(user1: User, user2: User): Promise<Result<Boolean>> {
@@ -17,11 +18,11 @@ export class RepositoryNeo4j implements RepositoryInterface {
         await session.run(queries.createFriendsQuery(user1, user2))
             .then((result: { records: any[]; }) => {
                 result.records.forEach(async record => {
-                    console.log(record);
+                    logger.color('blue').log(record);
                 })
             })
             .catch(function (error: any) {
-                console.log(error);
+                logger.error(error);
                 process.exit(130);
                 session.close();
                 return new Result<Boolean>(error, false);
