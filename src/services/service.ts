@@ -5,6 +5,8 @@ import {RepositoryInterface} from './repository.interface';
 import {RepositoryMongodb} from './repository.mongodb';
 import {RepositoryNeo4j} from './repository.neo4j';
 import {Connection} from 'mongoose';
+import {User} from "../models/user";
+import {queries} from "./queries.neo4j";
 
 // == Exported constants
 // Repositories, threads are handled through MongoDb, friends are handled through Neo4j (diff. imp. allowed)
@@ -17,7 +19,7 @@ export let mongoDb: Connection;
 
 // == NodeJS style imported packages
 const mongoose = require('mongoose');
-const neo = require('neo4j-driver').v1;
+export const neo = require('neo4j-driver').v1;
 export const neo4JDriver = neo.driver(environment.database.neo4j.uri,
     neo.auth.basic(environment.database.neo4j.user, environment.database.neo4j.password));
 
@@ -50,21 +52,22 @@ export async function init() {
 // Called once MongoDb is connected
 app.on('mongoConnected', async () => {
 
-
     // Tries to connect to the Neo4J DB to check if the connection is valid
     // Creates and deletes the person Bob as a test, throws errors if this fails
     const createSession = neo4JDriver.session();
     await createSession
-        .run("CREATE (n:Person {name:'Bob'}) RETURN n.name")
+        .run(queries.createTestObject)
         .then((result: { records: any[]; }) => {
             result.records.forEach(async record => {
+                console.log(record);
                 const deleteSession = neo4JDriver.session();
                 await deleteSession
-                    .run("MATCH (n { name: 'Bob' }) DETACH DELETE n")
+                    .run(queries.deleteTestObject)
                     .catch(function (error: any) {
                         console.log(error);
                         process.exit(130);
                     });
+                console.log('\n> Succesfully deleted Bob')
                 deleteSession.close();
             });
 

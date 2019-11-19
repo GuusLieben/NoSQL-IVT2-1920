@@ -1,3 +1,3 @@
-export interface Thread {
+export class Thread {
 
 }

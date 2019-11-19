@@ -9,8 +9,8 @@ import ObjectId = Types.ObjectId;
 
 export class RepositoryMongodb implements RepositoryInterface {
 
-    createFriends(user1: User, user2: User): Result<Boolean> {
-        throw 'Unsupported operation';
+    createFriends(user1: User, user2: User): Promise<Result<Boolean>> {
+        throw new Error("Method not implemented.");
     }
 
     createThread(user: User, title: String, content: String): Result<Boolean> {

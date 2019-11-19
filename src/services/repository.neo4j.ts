@@ -6,70 +6,89 @@ import {Thread} from "../models/thread";
 import {Result} from "../models/result";
 import {Friends} from "../models/friends";
 import {RepositoryInterface} from "./repository.interface";
+import {neo} from "./service";
+import {neo4JDriver} from "./service";
+import {queries} from "./queries.neo4j";
 
 export class RepositoryNeo4j implements RepositoryInterface {
-    createFriends(user1: User, user2: User): Result<Boolean> {
-        throw 'Unsupported operation';
+    async createFriends(user1: User, user2: User): Promise<Result<Boolean>> {
+        const session = neo4JDriver.session();
+
+        await session.run(queries.createFriendsQuery(user1, user2))
+            .then((result: { records: any[]; }) => {
+                result.records.forEach(async record => {
+                    console.log(record);
+                })
+            })
+            .catch(function (error: any) {
+                console.log(error);
+                process.exit(130);
+                session.close();
+                return new Result<Boolean>(error, false);
+            });
+        session.close();
+        return new Result<Boolean>(undefined, true);
     }
 
-    createThread(user: User, title: String, content: String): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
+    // createThread(user: User, title: String, content: String): Promise<Result<Boolean>> {
+    //     return undefined;
+    // }
+    //
+    // createUser(username: String, password: String): Promise<Result<Boolean>> {
+    //     return undefined;
+    // }
+    //
+    // deleteComment(commentId: ObjectId): Promise<Result<Boolean>> {
+    //     return undefined;
+    // }
+    //
+    // deleteFriends(user1: User, user2: User): Promise<Result<Boolean>> {
+    //     return undefined;
+    // }
+    //
+    // deleteThread(threadId: ObjectId): Promise<Result<Boolean>> {
+    //     return undefined;
+    // }
+    //
+    // deleteUser(username: String, password: String): Promise<Result<Boolean>> {
+    //     return undefined;
+    // }
+    //
+    // getComment(commentId: ObjectId): Promise<Result<Comment>> {
+    //     return undefined;
+    // }
+    //
+    // getCommentsForThread(threadId: ObjectId): Promise<Result<Array<Comment>>> {
+    //     return undefined;
+    // }
+    //
+    // getFriends(username: String): Promise<Result<Array<Friends>>> {
+    //     return undefined;
+    // }
+    //
+    // getThread(threadId: ObjectId): Promise<Result<Thread>> {
+    //     return undefined;
+    // }
+    //
+    // getThreads(): Promise<Result<Array<Thread>>> {
+    //     return undefined;
+    // }
+    //
+    // getUser(username: String): Promise<Result<User>> {
+    //     return undefined;
+    // }
+    //
+    // postComment(threadId: ObjectId): Promise<Result<Boolean>> {
+    //     return undefined;
+    // }
+    //
+    // updateThread(threadId: ObjectId, content: String): Promise<Result<Boolean>> {
+    //     return undefined;
+    // }
+    //
+    // updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result<Boolean>> {
+    //     return undefined;
+    // }
 
-    createUser(username: String, password: String): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
-
-    deleteComment(commentId: ObjectId): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
-
-    deleteFriends(user1: User, user2: User): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
-
-    deleteThread(threadId: ObjectId): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
-
-    deleteUser(username: String, password: String): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
-
-    getComment(commentId: ObjectId): Result<Comment> {
-        throw 'Unsupported operation';
-    }
-
-    getCommentsForThread(threadId: ObjectId): Result<Array<Comment>> {
-        throw 'Unsupported operation';
-    }
-
-    getFriends(username: String): Result<Array<Friends>> {
-        throw 'Unsupported operation';
-    }
-
-    getThread(threadId: ObjectId): Result<Thread> {
-        throw 'Unsupported operation';
-    }
-
-    getThreads(): Result<Array<Thread>> {
-        throw 'Unsupported operation';
-    }
-
-    getUser(username: String): Result<User> {
-        throw 'Unsupported operation';
-    }
-
-    postComment(threadId: ObjectId): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
-
-    updateThread(threadId: ObjectId, content: String): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
-
-    updateUser(username: String, oldPassword: String, newPassword: String): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
 
 }
