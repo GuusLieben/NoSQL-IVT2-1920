@@ -26,18 +26,6 @@ before((done: any) => {
 
 // User tests //
 
-describe('getUser test', () => {
-    it('should return user Guus', (done: any) => {
-        chai.request(app)
-            .get('/user/guuslieben')
-            .end(function (err: any, res: any) {
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-                done();
-            });
-    });
-});
-
 describe('createUser test', () => {
     it('should create a new user', (done: any) => {
         chai.request(app)
@@ -53,14 +41,29 @@ describe('createUser test', () => {
                 done();
             });
     })
+});
 
-    it('should delete the created user', (done: any) => {
+describe('getUser test', () => {
+    it('should return user Test', (done: any) => {
         chai.request(app)
-            .delete('/user/Test')
-            .send({
-                'password': 'tester123'
-            })
+            .get('/user/Test')
             .end(function (err: any, res: any) {
+                expect(err).to.be.null;
+                expect(res).to.have.status(200);
+                done();
+            });
+    });
+});
+
+describe('updateUser test', () => {
+    it('should update the created user', (done: any) => {
+        chai.request(app)
+            .put('/user/Test')
+            .send({
+                'oldPassword': 'tester123',
+                'newPassword': 'newpassword123'
+            })
+            .end(function(err: any, res: any) {
                 expect(err).to.be.null;
                 expect(res).to.have.status(200);
                 done();
@@ -69,68 +72,9 @@ describe('createUser test', () => {
 });
 
 describe('deleteUser test', () => {
-    it('should create a new user', (done: any) => {
-        chai.request(app)
-            .post('/user')
-            .send({
-                'email': 'test@gmail.com',
-                'username': 'deleteTest',
-                'password': 'tester123'
-            })
-            .end(function (err: any, res: any) {
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-                done();
-            });
-    })
-
     it('should delete the created user', (done: any) => {
         chai.request(app)
-            .delete('/user/deleteTest')
-            .send({
-                'password': 'tester123'
-            })
-            .end(function (err: any, res: any) {
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-                done();
-            })
-    })
-});
-
-describe('updateUser test', () => {
-    it('should create a new user', (done: any) => {
-        chai.request(app)
-            .post('/user')
-            .send({
-                'email': 'test@gmail.com',
-                'username': 'Update',
-                'password': 'yeet'
-            })
-            .end(function (err: any, res: any) {
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-                done();
-            });
-    })
-
-    it('should update the created user', (done: any) => {
-        chai.request(app)
-            .put('/user/Update')
-            .send({
-                'oldPassword': 'yeet',
-                'newPassword': 'newpassword123'
-            })
-            .end(function(err: any, res: any) {
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-                done();
-        })
-    })
-
-    it('should delete the created user', (done: any) => {
-        chai.request(app)
-            .delete('/user/Update')
+            .delete('/user/Test')
             .send({
                 'password': 'newpassword123'
             })
