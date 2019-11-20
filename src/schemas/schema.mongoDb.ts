@@ -13,8 +13,8 @@ const Thread = new Schema({
     user: {type: String, required: true},
     title: {type: String, required: true},
     content: {type: String, required: true},
-    upvotedBy: {type: [{type: mongoose.Schema.ObjectId, ref: 'User'}], default: []},
-    downvotedBy: {type: [{type: mongoose.Schema.ObjectId, ref: 'User'}], default: []}
+    upvotedBy: {type: [{type: String}], default: []},
+    downvotedBy: {type: [{type: String}], default: []}
 });
 Thread.virtual('totalVotes').get(function () {
     return this.upvotedBy.length - this.downvotedBy.length;

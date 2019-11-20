@@ -19,4 +19,4 @@ router.get('/:id/comments/', (req, res) => {
 
 router.post('/:id/comments/', (req, res) => {
     commentController.postCommentOnComment(req, res);
-})
+});

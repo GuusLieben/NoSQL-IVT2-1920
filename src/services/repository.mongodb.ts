@@ -31,7 +31,10 @@ export class RepositoryMongodb implements RepositoryInterface {
             title: title,
             content: content
         }).then(async (res: any) => {
-            result = new Result(undefined, true);
+            result = new Result(undefined, {
+                status: true,
+                thread: res.get('_id')
+            });
             logger.debug('Created Thread : ' + JSON.stringify(res));
         }).catch((err: any) => {
             console.warn('Caught error on thread');
@@ -82,17 +85,22 @@ export class RepositoryMongodb implements RepositoryInterface {
 
     async getComment(commentId: Object): Promise<Result> {
         let result = new Result(undefined, undefined);
-        CommentModel.find({_id: commentId}, (err: any, res: Document[]) => {
+        await CommentModel.find({_id: commentId}, (err: any, res: any) => {
             if (err) {
                 result = new Result(err, undefined);
             } else {
                 let comment;
-                if (res[0].get('thread')) {
-                    comment = new Comment(res[0].get('user'), res[0].get('content'), res[0].get('thread'))
-                } else if (res[0].get('comment')) {
-                    comment = new Comment(res[0].get('user'), res[0].get('content'), res[0].get('comment'))
+                if (res.length > 0) {
+                    if (res[0].get('thread')) {
+                        comment = new Comment(res[0].get('user'), res[0].get('content'), res[0].get('thread'))
+                    } else if (res[0].get('comment')) {
+                        comment = new Comment(res[0].get('user'), res[0].get('content'), res[0].get('comment'))
+                    }
+                    result = new Result(undefined, comment);
+                } else {
+                    // In case it's not an array
+                    result = new Result(undefined, []);
                 }
-                result = new Result(undefined, comment);
             }
         });
         return result;
@@ -129,7 +137,7 @@ export class RepositoryMongodb implements RepositoryInterface {
 
     async getThreads(): Promise<Result> {
         let result = new Result(undefined, undefined);
-        await ThreadModel.find({}, (err: any, res: Document[]) => {
+        await ThreadModel.find({}, (err: any, res: any) => {
             if (err) {
                 result = new Result(err, undefined);
             } else {
@@ -162,9 +170,34 @@ export class RepositoryMongodb implements RepositoryInterface {
             user: username,
             content: content,
             thread: threadId
-        }).then((res: Document[]) => {
+        }).then((res: Document) => {
             logger.info('Reached update');
-            result = new Result(undefined, true)
+            result = new Result(undefined, {
+                status: true,
+                comment: res.get('_id')
+            })
+        }).catch((err: any) => {
+            logger.error(err);
+            result = new Result(err, false);
+        });
+
+        logger.info('Reached end');
+        return result;
+    }
+
+    async postCommentOnComment(threadId: Object, username: String, content: String): Promise<Result> {
+        let result = new Result(undefined, false);
+
+        await CommentModel.create({
+            user: username,
+            content: content,
+            comment: threadId
+        }).then((res: Document) => {
+            logger.info('Reached update');
+            result = new Result(undefined, {
+                status: true,
+                comment: res.get('_id')
+            })
         }).catch((err: any) => {
             logger.error(err);
             result = new Result(err, false);
@@ -202,17 +235,30 @@ export class RepositoryMongodb implements RepositoryInterface {
 
     async upvote(threadId: Object, username: String): Promise<Result> {
         let result = new Result(undefined, false);
+        let currentVotes: any[] = [];
+        await ThreadModel.find({_id: threadId}, {upvotedBy: 1, _id: 0}).then((res: any) => {
+            logger.info(JSON.stringify(res));
+            currentVotes = res.get('upvotedBy');
+        }).catch((err: any) => {
+            result = new Result(err, false);
+        });
 
+        logger.debug(JSON.stringify(currentVotes));
+        logger.debug(currentVotes.some(e => e == username));
+        if (currentVotes.indexOf(username) >= 0) {
+            return new Result('You cannot upvote the same parent twice', false);
+        } else {
+            currentVotes.push(username);
+            await ThreadModel.update({_id: threadId}, {upvotedBy: currentVotes}).then((res: any) => {
+                result = new Result(undefined, true);
+            }).catch((err: any) => {
+                result = new Result(err, false);
+            });
+        }
         return result;
     }
 
     async downvote(threadId: Object, username: String): Promise<Result> {
-        let result = new Result(undefined, false);
-
-        return result;
-    }
-
-    async postCommentOnComment(threadId: Object, username: string, content: string,): Promise<Result> {
         let result = new Result(undefined, false);
 
         return result;

@@ -123,4 +123,8 @@ export class RepositoryNeo4j implements RepositoryInterface {
     upvote(threadId: Object, username: String): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
+
+    postCommentOnComment(threadId: Object, username: string, content: string): Promise<Result> {
+        throw 'Method not implemented in Neo4J';
+    }
 }
