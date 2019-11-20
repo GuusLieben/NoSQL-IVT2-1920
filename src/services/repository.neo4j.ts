@@ -13,11 +13,6 @@ export class RepositoryNeo4j implements RepositoryInterface {
         const session = neo4JDriver.session();
 
         await session.run(queries.createFriends(user1, user2))
-            .then((result: { records: any[]; }) => {
-                result.records.forEach(async record => {
-                    logger.color('blue').log(record);
-                })
-            })
             .catch(function (error: any) {
                 logger.error(error);
                 session.close();
@@ -30,9 +25,10 @@ export class RepositoryNeo4j implements RepositoryInterface {
     async getFriends(username: String): Promise<Result> {
         const session = neo4JDriver.session();
 
-        await session.run(queries.getFriends(username))
+        return await session.run(queries.getFriends(username))
             .then((result: any) => {
                 session.close();
+                console.log('The records are ' + JSON.stringify(result.records));
                 return new Result(undefined, result.records);
             })
             .catch(function (error: any) {
@@ -40,9 +36,6 @@ export class RepositoryNeo4j implements RepositoryInterface {
                 session.close();
                 return new Result(error, false);
             });
-
-        session.close();
-        return new Result(undefined, []);
     }
 
     async deleteFriends(user1: User, user2: User): Promise<Result> {
@@ -52,9 +45,8 @@ export class RepositoryNeo4j implements RepositoryInterface {
             .then(async (result: any) => {
 
                 const deleteNodeSession = neo4JDriver.session();
-                // TODO : Delete only user1/2 if no friends left
-                // Do not loop all users (growth impact)
-                await deleteNodeSession.run(queries.deleteFriendsNodes)
+
+                await deleteNodeSession.run(queries.deleteFriendlessNodes(user1, user2))
                     .catch(function (error: any) {
                         logger.error(error);
                         return new Result(error, false);
