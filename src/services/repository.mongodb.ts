@@ -62,38 +62,29 @@ export class RepositoryMongodb implements RepositoryInterface {
 
     async deleteComment(commentId: Object): Promise<Result> {
         let result = new Result(undefined, true);
-        await CommentModel.find({_id: commentId}).remove().exec();
+        await CommentModel.deleteOne({_id: commentId}).catch((err: any) => result = new Result(err, undefined));
         return result;
     }
 
     async deleteThread(threadId: Object): Promise<Result> {
         let result = new Result(undefined, true);
-        await ThreadModel.find({_id: threadId}).remove().exec();
+        await ThreadModel.deleteOne({_id: threadId}).catch((err: any) => result = new Result(err, undefined));
         return result;
     }
 
     async deleteUser(username: String, password: String): Promise<Result> {
-        let result = new Result(undefined, true);
+        let result = new Result(undefined, false);
         let passwordOkay = false;
-        let failed = false;
         await UserModel.find({username: username}, (err: any, res: Document[]) => {
-            logger.info(JSON.stringify(res));
             if (res[0]) {
                 passwordOkay = (res[0].get('password') === password);
-            } else {
-                result = new Result('Passwords do not match', false);
-                failed = true;
             }
         });
 
-        if (failed) {
-            return result;
-        }
-
         if (passwordOkay) {
-            await UserModel.find({username: username}).remove().exec((res: any) => {
+            await ThreadModel.deleteOne({username: username}).then((res: any) => {
                 result = new Result(undefined, true);
-            });
+            }).catch((err: any) => result = new Result(err, undefined));
         }
         return result;
     }
