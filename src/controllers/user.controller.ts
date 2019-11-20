@@ -6,6 +6,8 @@ import {logger} from "../app";
 const friendRepository: RepositoryInterface = new RepositoryNeo4j();
 const mongoRepository: RepositoryInterface = new RepositoryMongodb();
 
+// Export functions
+
 export async function getFriends(req: any, res: any) {
     logger.debug('> getFriends was called');
     const username = req.params.username;

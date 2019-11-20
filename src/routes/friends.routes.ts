@@ -2,7 +2,6 @@ import * as express from 'express';
 export const router = express.Router();
 const controller = require('../controllers/controllers.bin').friendController;
 
-// #Neo4J
 
 router.post('/', (req, res) => {
     controller.createFriendship(req, res)

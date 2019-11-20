@@ -4,6 +4,8 @@ import {logger} from "../app";
 
 const friendRepository: RepositoryInterface = new RepositoryNeo4j();
 
+// Export functions
+
 export async function createFriendship(req: any, res: any) {
 
     logger.debug('> createFriendship was called');

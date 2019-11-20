@@ -4,6 +4,8 @@ import {logger} from "../app";
 
 const mongoRepository: RepositoryInterface = new RepositoryMongodb();
 
+// Export functions
+
 export async function createThread(req: any, res: any) {
     logger.debug('> createThread was called');
     const username = req.body.username;

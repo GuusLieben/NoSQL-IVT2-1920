@@ -5,12 +5,8 @@ export const neo = require('neo4j-driver').v1;
 // == TS style imported packages
 import {app, logger} from '../app';
 import environment from '../environment';
-import {RepositoryInterface} from './repository.interface';
-import {RepositoryMongodb} from './repository.mongodb';
-import {RepositoryNeo4j} from './repository.neo4j';
 import {Connection} from 'mongoose';
 import {queries} from './queries.neo4j';
-import {User} from "../models/user";
 
 // == Exported constants
 // First check the process environment (Heroku), then the configuration, only then use hardcoded

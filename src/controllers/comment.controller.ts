@@ -1,9 +1,10 @@
 import {RepositoryInterface} from "../services/repository.interface";
 import {RepositoryMongodb} from "../services/repository.mongodb";
 import {logger} from "../app";
-import {commentController} from "./controllers.bin";
 
 const mongoRepository: RepositoryInterface = new RepositoryMongodb();
+
+// Export functions
 
 export async function postComment(req: any, res: any) {
     logger.debug('> postComment was called');

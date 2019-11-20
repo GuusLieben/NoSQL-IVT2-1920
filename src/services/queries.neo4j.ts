@@ -1,4 +1,5 @@
-import {User} from '../models/user';
+
+// Queries need to be one long string, any form of concatenation throws errors
 
 export const queries = {
     createTestObject: "CREATE (n:Person {name:'TestUserThisIsATestUserTestFinalv2'}) RETURN n.name",
