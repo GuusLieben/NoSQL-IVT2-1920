@@ -92,6 +92,7 @@ export class RepositoryMongodb implements RepositoryInterface {
                 } else if (res[0].get('comment')) {
                     comment = new Comment(res[0].get('user'), res[0].get('content'), res[0].get('comment'))
                 }
+                result = new Result(undefined, comment);
             }
         });
         return result;
@@ -99,13 +100,16 @@ export class RepositoryMongodb implements RepositoryInterface {
 
     async getCommentsForThread(threadId: Object): Promise<Result> {
         let result = new Result(undefined, undefined);
-        CommentModel.find({$or: [{thread: threadId}, {comment: threadId}]}, (err: any, res: Document[]) => {
+
+        await CommentModel.find({$or: [{thread: threadId}, {comment: threadId}]}, (err: any, res: Document[]) => {
             if (err) {
                 result = new Result(err, undefined);
             } else {
-                logger.debug(JSON.stringify(res));
+                logger.warn('Reached find');
+                result = new Result(undefined, res);
             }
         });
+        logger.warn('Reached end');
         return result;
     }
 
@@ -158,14 +162,15 @@ export class RepositoryMongodb implements RepositoryInterface {
             user: username,
             content: content,
             thread: threadId
-        }, (err: any, res: Document[]) => {
-            if (err) {
-                logger.error(err);
-                result = new Result(err, false);
-            } else {
-                result = new Result(undefined, true)
-            }
+        }).then((res: Document[]) => {
+            logger.info('Reached update');
+            result = new Result(undefined, true)
+        }).catch((err: any) => {
+            logger.error(err);
+            result = new Result(err, false);
         });
+
+        logger.info('Reached end');
         return result;
     }
 
@@ -181,7 +186,29 @@ export class RepositoryMongodb implements RepositoryInterface {
         return result;
     }
 
-    updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result> {
-        throw 'Unsupported operation';
+    async updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result> {
+        let result = new Result(undefined, false);
+
+        await ThreadModel.find({username: username}, (err: any, res: Document[]) => {
+            if (err) {
+                result = new Result(err, false);
+            } else {
+                result = new Result(undefined, true);
+            }
+        });
+
+        return result;
+    }
+
+    async upvote(threadId: Object, username: String): Promise<Result> {
+        let result = new Result(undefined, false);
+
+        return result;
+    }
+
+    async downvote(threadId: Object, username: String): Promise<Result> {
+        let result = new Result(undefined, false);
+
+        return result;
     }
 }

@@ -27,4 +27,8 @@ export interface RepositoryInterface {
     updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result>,
     deleteUser(username: String, password: String): Promise<Result>,
     getUser(username: String): Promise<Result>
+
+    // Voting
+    upvote(threadId: Object, username: String): Promise<Result>,
+    downvote(threadId: Object, username: String): Promise<Result>
 }
