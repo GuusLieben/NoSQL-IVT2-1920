@@ -1,19 +1,17 @@
 import {RepositoryInterface} from './repository.interface';
 import {User} from '../models/user';
 import {Result} from '../models/result';
-import {Comment} from "../models/comment";
-import {Thread} from "../models/thread";
 import {ThreadModel, UserModel} from "../schemas/schema.mongoDb";
 import {logger} from "../app";
 import {Document} from "mongoose";
 
 export class RepositoryMongodb implements RepositoryInterface {
 
-    createFriends(user1: User, user2: User): Promise<Result> {
+    createFriends(username1: string, username2: string): Promise<Result> {
         throw 'Method not implemented in MongoDB';
     }
 
-    deleteFriends(user1: User, user2: User): Promise<Result> {
+    deleteFriends(username1: string, username2: string): Promise<Result> {
         throw 'Method not implemented in MongoDB';
     }
 
@@ -72,8 +70,10 @@ export class RepositoryMongodb implements RepositoryInterface {
         throw 'Unsupported operation';
     }
 
-    deleteThread(threadId: Object): Promise<Result> {
-        throw 'Unsupported operation';
+    async deleteThread(threadId: Object): Promise<Result> {
+        let result = new Result(undefined, true);
+        await ThreadModel.deleteOne({_id: threadId}).catch((err: any) => result = new Result(err, undefined));
+        return result;
     }
 
     deleteUser(username: String, password: String): Promise<Result> {

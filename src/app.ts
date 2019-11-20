@@ -16,7 +16,6 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 
-
 // Initiate app and pass it to router management
 require('./routes/routes.bin').app(app);
 
