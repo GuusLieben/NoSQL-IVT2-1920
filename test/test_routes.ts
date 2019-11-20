@@ -18,12 +18,6 @@ before((done: any) => {
     setTimeout(() => done(), 2500);
 })
 
-// describe('createUser test', () => {
-//     it('should create a new user', (done: any) => {
-//
-//     })
-// })
-
 // User tests //
 
 describe('createUser test', () => {
@@ -85,3 +79,15 @@ describe('deleteUser test', () => {
             })
     })
 });
+
+describe('getFriends test', () => {
+    it('should return the friends', (done: any) => {
+        chai.request(app)
+            .get('/user/Arnold/friends')
+            .end(function (err: any, res: any) {
+                expect(err).to.be.null;
+                expect(res).to.have.status(200);
+                done();
+            })
+    })
+})
