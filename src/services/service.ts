@@ -92,4 +92,3 @@ app.on('mongoConnected', async () => {
 app.on('neo4jConnected', () => app.listen(port, () => {
     logger.color('yellow').log('⚠️ Application started on port ' + port);
 }));
-
