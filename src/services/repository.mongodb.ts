@@ -75,7 +75,11 @@ export class RepositoryMongodb implements RepositoryInterface {
     async deleteUser(username: String, password: String): Promise<Result> {
         let result = new Result(undefined, true);
         let passwordOkay = false;
-        await UserModel.find({username: username}, (err: any, res: Document[]) => passwordOkay = (res[0].get('password') === password));
+        await UserModel.find({username: username}, (err: any, res: Document[]) => {
+            if (res[0]) {
+                passwordOkay = (res[0].get('password') === password);
+            }
+        });
 
         if (passwordOkay) {
             await ThreadModel.deleteOne({username: username}).catch((err: any) => result = new Result(err, undefined));
@@ -238,33 +242,32 @@ export class RepositoryMongodb implements RepositoryInterface {
     }
 
     async upvote(threadId: Object, username: String): Promise<Result> {
-        let result = new Result(undefined, false);
-        let currentVotes: any[] = [];
-        await ThreadModel.find({_id: threadId}, {upvotedBy: 1, _id: 0}).then((res: any) => {
-            logger.info(JSON.stringify(res));
-            currentVotes = res.get('upvotedBy');
-        }).catch((err: any) => {
-            result = new Result(err, false);
-        });
-
-        logger.debug(JSON.stringify(currentVotes));
-        logger.debug(currentVotes.some(e => e == username));
-        if (currentVotes.indexOf(username) >= 0) {
-            return new Result('You cannot upvote the same parent twice', false);
-        } else {
-            currentVotes.push(username);
-            await ThreadModel.update({_id: threadId}, {upvotedBy: currentVotes}).then((res: any) => {
-                result = new Result(undefined, true);
-            }).catch((err: any) => {
-                result = new Result(err, false);
-            });
-        }
-        return result;
+        return await vote(threadId, username, {upvotedBy: 1, _id: 0}, 'upvotedBy');
     }
 
     async downvote(threadId: Object, username: String): Promise<Result> {
-        let result = new Result(undefined, false);
-
-        return result;
+        return await vote(threadId, username, {downvotedBy: 1, _id: 0}, 'downvotedBy');
     }
+}
+
+async function vote(threadId: Object, username: String, projection: any, field: String) {
+    let result = new Result(undefined, false);
+    let currentVotes: any[] = [];
+    await ThreadModel.find({_id: threadId}, projection).then((res: any) => {
+        currentVotes = res[0].get(field);
+    }).catch((err: any) => {
+        result = new Result(err, false);
+    });
+
+    if (currentVotes.indexOf(username) >= 0) {
+        return new Result('You cannot upvote the same parent twice', false);
+    } else {
+        await ThreadModel.update({_id: threadId}, {$push: {upvotedBy: username}}).then((res: any) => {
+            logger.debug(JSON.stringify(res));
+            result = new Result(undefined, true);
+        }).catch((err: any) => {
+            result = new Result(err, false);
+        });
+    }
+    return result;
 }
