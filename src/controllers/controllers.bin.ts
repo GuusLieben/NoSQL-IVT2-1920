@@ -1,2 +1,3 @@
 // module.exports.x = require('./x.controller')
-// etc
+
+export const friendController = require('./friends.controller');

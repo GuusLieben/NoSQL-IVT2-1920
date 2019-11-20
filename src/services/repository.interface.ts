@@ -11,8 +11,8 @@ export interface RepositoryInterface {
     getComment(commentId: Object): Promise<Result>,
 
     // Friends
-    createFriends(user1: User, user2: User): Promise<Result>,
-    deleteFriends(user1: User, user2: User): Promise<Result>,
+    createFriends(username1: string, username2: string): Promise<Result>,
+    deleteFriends(username1: string, username2: string): Promise<Result>,
     getFriends(username: String): Promise<Result>,
 
     // Threads

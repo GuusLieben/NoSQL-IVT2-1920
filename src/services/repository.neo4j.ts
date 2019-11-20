@@ -4,15 +4,13 @@ import {RepositoryInterface} from './repository.interface';
 import {neo4JDriver} from './service';
 import {queries} from './queries.neo4j';
 import {logger} from "../app";
-import {Thread} from "../models/thread";
-import {Comment} from "../models/comment";
 
 export class RepositoryNeo4j implements RepositoryInterface {
 
-    async createFriends(user1: User, user2: User): Promise<Result> {
+    async createFriends(username1: string, username2: string): Promise<Result> {
         const session = neo4JDriver.session();
 
-        await session.run(queries.createFriends(user1, user2))
+        await session.run(queries.createFriends(username1, username2))
             .catch(function (error: any) {
                 logger.error(error);
                 session.close();
@@ -22,7 +20,7 @@ export class RepositoryNeo4j implements RepositoryInterface {
         return new Result(undefined, true);
     }
 
-    async getFriends(username: String): Promise<Result> {
+    async getFriends(username: string): Promise<Result> {
         const session = neo4JDriver.session();
 
         return await session.run(queries.getFriends(username))
@@ -38,15 +36,15 @@ export class RepositoryNeo4j implements RepositoryInterface {
             });
     }
 
-    async deleteFriends(user1: User, user2: User): Promise<Result> {
+    async deleteFriends(username1: string, username2: string): Promise<Result> {
         const session = neo4JDriver.session();
 
-        await session.run(queries.deleteFriendsRelationship(user1, user2))
+        await session.run(queries.deleteFriendsRelationship(username1, username2))
             .then(async (result: any) => {
 
                 const deleteNodeSession = neo4JDriver.session();
 
-                await deleteNodeSession.run(queries.deleteFriendlessNodes(user1, user2))
+                await deleteNodeSession.run(queries.deleteFriendlessNodes(username1, username2))
                     .catch(function (error: any) {
                         logger.error(error);
                         return new Result(error, false);
