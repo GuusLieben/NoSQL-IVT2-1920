@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "ts-node src/app.ts"
+    "start": "ts-node src/app.ts",
+    "test": "mocha -r ts-node/register src/routes/routes.spec.ts"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -21,13 +22,16 @@
     "typescript": "^3.7.2"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.5",
     "@types/cookie-parser": "^1.4.2",
+    "@types/mocha": "^5.2.7",
     "@types/mongoose": "^5.5.31",
     "@types/morgan": "^1.7.37",
     "@types/neo4j": "^2.0.2",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.2.2",
-    "nodemon": "^1.19.4"
+    "nodemon": "^1.19.4",
+    "typings": "^2.1.1"
   }
 }
