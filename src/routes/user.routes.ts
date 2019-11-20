@@ -1,4 +1,5 @@
 import * as express from 'express';
+import {logger} from "../app";
 export const router = express.Router();
 const controller = require('../controllers/controllers.bin').userController;
 
@@ -9,7 +10,7 @@ router.get('/:username', (req, res, next) => {
 });
 
 // Ex.: localhost:3000/user/guuslieben/friends
-router.get('/:username/friends', (req, res) => {
+router.get('/:username/friends',  (req, res) => {
     controller.getFriends(req, res);
 });
 

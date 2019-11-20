@@ -39,7 +39,8 @@ app.use((err: any, req: any, res: any, next: any) => {
         return next(err)
     }
     res.status(500);
-    res.json({error: err})
+    logger.error('Error : ' + JSON.stringify(err));
+    res.json({global_error: err})
 });
 
 // Initiate database and application services

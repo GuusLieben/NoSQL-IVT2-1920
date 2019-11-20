@@ -1,4 +1,3 @@
-import {User} from '../models/user';
 import {Result} from '../models/result';
 import {RepositoryInterface} from './repository.interface';
 import {neo4JDriver} from './service';
@@ -29,8 +28,9 @@ export class RepositoryNeo4j implements RepositoryInterface {
         return await session.run(queries.getFriends(username))
             .then((result: any) => {
                 session.close();
-                console.log('The records are ' + JSON.stringify(result.records));
-                return new Result(undefined, result.records);
+                const users: string[] = [];
+                result.records.forEach((record: any) => users.push(record.get('user.name')))
+                return new Result(undefined, users);
             })
             .catch(function (error: any) {
                 logger.error(error);
