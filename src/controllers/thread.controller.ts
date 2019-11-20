@@ -98,3 +98,33 @@ export async function updateThread(req: any, res: any) {
     }
 
 }
+
+export async function upvoteThread(req: any, res: any) {
+    logger.debug('upvoteThread was called')
+    const id = req.params.id;
+    const username = req.body.username;
+    const result = await mongoRepository.upvote(id, username);
+
+    if (result.error) {
+        res.status(500).json({err: result.error});
+        logger.color('red').debug('> upvoteThread went wrong!');
+    } else {
+        res.status(200).json({result: result.result});
+        logger.color('green').debug('> upvoteThread was successful');
+    }
+}
+
+export async function downvoteThread(req: any, res: any) {
+    logger.debug('downvoteThread was called')
+    const id = req.params.id;
+    const username = req.body.username;
+    const result = await mongoRepository.downvote(id, username);
+
+    if (result.error) {
+        res.status(500).json({err: result.error});
+        logger.color('red').debug('> downvoteThread went wrong!');
+    } else {
+        res.status(200).json({result: result.result});
+        logger.color('green').debug('> downvoteThread was successful');
+    }
+}

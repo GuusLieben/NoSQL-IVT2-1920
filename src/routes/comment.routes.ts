@@ -1,4 +1,5 @@
 import * as express from 'express';
+
 export const router = express.Router();
 const commentController = require('../controllers/controllers.bin').commentController;
 const threadController = require('../controllers/controllers.bin').threadController;
@@ -15,4 +16,12 @@ router.get('/:id/', (req, res) => {
 router.get('/:id/comments/', (req, res) => {
     threadController.getCommentsForThread(req, res);
 });
+
+router.put('/:id/upvote', (req, res) => {
+    commentController.upvoteComment(req, res);
+})
+
+router.put('/:id/downvote', (req, res) => {
+    commentController.downvoteComment(req, res);
+})
 

@@ -32,3 +32,10 @@ router.get('/:id/', (req, res) => {
     threadController.getThread(req, res);
 });
 
+router.put('/:id/upvote', (req, res) => {
+    threadController.upvoteThread(req, res);
+})
+
+router.put('/:id/downvote', (req, res) => {
+    threadController.downvoteThread(req, res);
+})
