@@ -115,4 +115,12 @@ export class RepositoryNeo4j implements RepositoryInterface {
     updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
+
+    downvote(threadId: Object, username: String): Promise<Result> {
+        throw 'Method not implemented in Neo4J';
+    }
+
+    upvote(threadId: Object, username: String): Promise<Result> {
+        throw 'Method not implemented in Neo4J';
+    }
 }
