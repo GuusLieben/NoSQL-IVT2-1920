@@ -9,12 +9,23 @@ router.post('/', (req, res, next) => {
     // Username, title, content (no markup)
 });
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id/', (req, res, next) => {
     // New content
     // Error title update : 406 (Not Acceptable)
 });
 
-router.delete('/:id', (req, res, next) => {
+router.post('/:id/comments/', (req, res, next) => {
+    // If thread not exist : error
+    // Content, username, threadId
+    //
+});
+
+router.get('/:id/comments/', (req, res, next) => {
+    // Get by thread Id
+    // Username, content, up-/downvotes
+});
+
+router.delete('/:id/', (req, res, next) => {
     // Also delete comments/up-/downvotes
 });
 
@@ -24,7 +35,8 @@ router.get('/', (req, res, next) => {
     // TODO : Kick a teacher, sep. API?
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id/', (req, res, next) => {
     // Return Id, Title, Username, Content, Total up-/downvotes
     // Full comments (comment controller)
 });
+
