@@ -22,9 +22,14 @@ Thread.virtual('totalVotes').get(function () {
 export const ThreadModel = mongoose.model('Thread', Thread);
 
 const Comment = new Schema({
-    user: {type: User, required: true},
+    user: {type: mongoose.Schema.ObjectId, ref:'User', required: true},
     content: {type: String, required: true},
-    thread: {type: Thread},
-    comment: {type: this}
+    thread: {type: mongoose.Schema.ObjectId, ref:'Thread'},
+    comment: {type: mongoose.Schema.ObjectId, ref:'Comment'},
+    upvotedBy: {type: [{type: mongoose.Schema.ObjectId, ref: 'User'}], default: []},
+    downvotedBy: {type: [{type: mongoose.Schema.ObjectId, ref: 'User'}], default: []}
+});
+Comment.virtual('totalVotes').get(function () {
+    return this.upvotedBy.length - this.downvotedBy.length;
 });
 export const CommentModel = mongoose.model('Comment', Comment);

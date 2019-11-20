@@ -110,8 +110,16 @@ export class RepositoryMongodb implements RepositoryInterface {
         return result;
     }
 
-    getCommentsForThread(threadId: Object): Promise<Result> {
-        throw 'Unsupported operation';
+    async getCommentsForThread(threadId: Object): Promise<Result> {
+        let result = new Result(undefined, undefined);
+        CommentModel.find({$or: [{thread: threadId}, {comment: threadId}]}, (err: any, res: Document[]) => {
+            if (err) {
+                result = new Result(err, undefined);
+            } else {
+                logger.debug(JSON.stringify(res));
+            }
+        });
+        return result;
     }
 
     async getThread(threadId: Object): Promise<Result> {
@@ -157,8 +165,16 @@ export class RepositoryMongodb implements RepositoryInterface {
         return result;
     }
 
-    postComment(threadId: Object): Promise<Result> {
-        throw 'Unsupported operation';
+    async postComment(username: String, content: String, threadId: Object): Promise<Result> {
+        let result = new Result(undefined, undefined);
+        await CommentModel.create({}, (err: any, res: Document[]) => {
+            if (err) {
+                result = new Result(err, undefined);
+            } else {
+
+            }
+        });
+        return result;
     }
 
     updateThread(threadId: Object, content: String): Promise<Result> {
@@ -168,6 +184,4 @@ export class RepositoryMongodb implements RepositoryInterface {
     updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result> {
         throw 'Unsupported operation';
     }
-
-
 }

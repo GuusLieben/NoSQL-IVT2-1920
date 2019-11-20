@@ -5,7 +5,7 @@ import {Result} from '../models/result';
 
 export interface RepositoryInterface {
     // Comments
-    postComment(threadId: Object): Promise<Result>,
+    postComment(username: String, content: String, threadId: Object): Promise<Result>,
     deleteComment(commentId: Object): Promise<Result>,
     getCommentsForThread(threadId: Object): Promise<Result>,
     getComment(commentId: Object): Promise<Result>,
