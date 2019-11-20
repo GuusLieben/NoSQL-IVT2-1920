@@ -13,9 +13,6 @@ import {queries} from './queries.neo4j';
 import {User} from "../models/user";
 
 // == Exported constants
-// Repositories, threads are handled through MongoDb, friends are handled through Neo4j (diff. imp. allowed)
-const threadRepository: RepositoryInterface = new RepositoryMongodb();
-const friendRepository: RepositoryInterface = new RepositoryNeo4j();
 // First check the process environment (Heroku), then the configuration, only then use hardcoded
 export const port = process.env.PORT || environment.app.port || 5000;
 // For repositories

@@ -7,6 +7,9 @@ import {logger} from "../app";
 
 export class RepositoryNeo4j implements RepositoryInterface {
 
+    constructor() {
+    }
+
     async createFriends(username1: string, username2: string): Promise<Result> {
         const session = neo4JDriver.session();
 

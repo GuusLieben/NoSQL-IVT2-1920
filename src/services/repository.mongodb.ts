@@ -1,11 +1,15 @@
 import {RepositoryInterface} from './repository.interface';
 import {User} from '../models/user';
 import {Result} from '../models/result';
-import {ThreadModel, UserModel} from "../schemas/schema.mongoDb";
+import {CommentModel, ThreadModel, UserModel} from "../schemas/schema.mongoDb";
 import {logger} from "../app";
 import {Document} from "mongoose";
+import {Comment} from "../models/comment";
 
 export class RepositoryMongodb implements RepositoryInterface {
+
+    constructor() {
+    }
 
     createFriends(username1: string, username2: string): Promise<Result> {
         throw 'Method not implemented in MongoDB';
@@ -66,8 +70,10 @@ export class RepositoryMongodb implements RepositoryInterface {
         return result;
     }
 
-    deleteComment(commentId: Object): Promise<Result> {
-        throw 'Unsupported operation';
+    async deleteComment(commentId: Object): Promise<Result> {
+        let result = new Result(undefined, true);
+        await CommentModel.deleteOne({_id: commentId}).catch((err: any) => result = new Result(err, undefined));
+        return result;
     }
 
     async deleteThread(threadId: Object): Promise<Result> {
@@ -76,12 +82,32 @@ export class RepositoryMongodb implements RepositoryInterface {
         return result;
     }
 
-    deleteUser(username: String, password: String): Promise<Result> {
-        throw 'Unsupported operation';
+    async deleteUser(username: String, password: String): Promise<Result> {
+        let result = new Result(undefined, true);
+        let passwordOkay = false;
+        await UserModel.find({username: username}, (err: any, res: Document[]) => passwordOkay = (res[0].get('password') === password));
+
+        if (passwordOkay) {
+            await ThreadModel.deleteOne({username: username}).catch((err: any) => result = new Result(err, undefined));
+        }
+        return result;
     }
 
-    getComment(commentId: Object): Promise<Result> {
-        throw 'Unsupported operation';
+    async getComment(commentId: Object): Promise<Result> {
+        let result = new Result(undefined, undefined);
+        CommentModel.find({_id: commentId}, (err: any, res: Document[]) => {
+            if (err) {
+                result = new Result(err, undefined);
+            } else {
+                let comment;
+                if (res[0].get('thread')) {
+                    comment = new Comment(res[0].get('user'), res[0].get('content'), res[0].get('thread'))
+                } else if (res[0].get('comment')) {
+                    comment = new Comment(res[0].get('user'), res[0].get('content'), res[0].get('comment'))
+                }
+            }
+        });
+        return result;
     }
 
     getCommentsForThread(threadId: Object): Promise<Result> {
@@ -105,12 +131,12 @@ export class RepositoryMongodb implements RepositoryInterface {
     async getThreads(): Promise<Result> {
         let result = new Result(undefined, undefined);
         await ThreadModel.find({}, (err: any, res: Document[]) => {
-           if (err) {
-               result = new Result(err, undefined);
-           } else {
-               logger.info('Threads : ' + res.length);
-               logger.info(JSON.stringify(res));
-           }
+            if (err) {
+                result = new Result(err, undefined);
+            } else {
+                logger.info('Threads : ' + res.length);
+                logger.info(JSON.stringify(res));
+            }
         });
         return result;
     }
