@@ -25,22 +25,9 @@ export class RepositoryMongodb implements RepositoryInterface {
 
     async createThread(username: String, title: String, content: String): Promise<Result> {
         let result = new Result(undefined, undefined);
-        let userId;
-
-        await UserModel.find({username: username}, async (err: any, res: Document[]) => {
-            if (err) {
-                console.warn('Reached error on user');
-                result = new Result(err, false);
-            } else {
-                userId = res[0].get('_id');
-            }
-        }).catch((err: any) => {
-            console.warn('Caught error on user');
-            result = new Result(err, false);
-        });
 
         await ThreadModel.create({
-            user: userId,
+            user: username,
             title: title,
             content: content
         }).then(async (res: any) => {
@@ -128,7 +115,7 @@ export class RepositoryMongodb implements RepositoryInterface {
             if (err) {
                 result = new Result(err, undefined);
             } else {
-                logger.debug(JSON.stringify(res));
+                result = new Result(undefined, res[0]);
             }
         }).catch((err: any) => {
             result = new Result(err, undefined);
@@ -142,8 +129,7 @@ export class RepositoryMongodb implements RepositoryInterface {
             if (err) {
                 result = new Result(err, undefined);
             } else {
-                logger.info('Threads : ' + res.length);
-                logger.info(JSON.stringify(res));
+                result = new Result(undefined, res);
             }
         });
         return result;
@@ -166,19 +152,33 @@ export class RepositoryMongodb implements RepositoryInterface {
     }
 
     async postComment(username: String, content: String, threadId: Object): Promise<Result> {
-        let result = new Result(undefined, undefined);
-        await CommentModel.create({}, (err: any, res: Document[]) => {
-            if (err) {
-                result = new Result(err, undefined);
-            } else {
+        let result = new Result(undefined, false);
 
+        await CommentModel.create({
+            user: username,
+            content: content,
+            thread: threadId
+        }, (err: any, res: Document[]) => {
+            if (err) {
+                logger.error(err);
+                result = new Result(err, false);
+            } else {
+                result = new Result(undefined, true)
             }
         });
         return result;
     }
 
-    updateThread(threadId: Object, content: String): Promise<Result> {
-        throw 'Unsupported operation';
+    async updateThread(threadId: Object, content: String): Promise<Result> {
+        let result = new Result(undefined, false);
+        await ThreadModel.update({_id: threadId}, {content: content}, (err: any, res: Document[]) => {
+            if (err) {
+                result = new Result(err, false);
+            } else {
+                result = new Result(undefined, true);
+            }
+        });
+        return result;
     }
 
     updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result> {

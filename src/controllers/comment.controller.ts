@@ -8,7 +8,8 @@ export async function postComment (req: any, res: any) {
     logger.debug('> postComment was called');
     const username = req.body.username;
     const content = req.body.content;
-    const threadId = req.body.threadId;
+    const threadId = req.params.id;
+
     const result = await mongoRepository.postComment(username, content, threadId);
 
     if (result.error) {

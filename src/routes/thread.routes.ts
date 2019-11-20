@@ -22,6 +22,7 @@ router.post('/:id/comments/', (req, res) => {
 });
 
 router.get('/:id/comments/', (req, res) => {
+    threadController.getCommentsForThread(req, res);
     // Get by thread Id
     // Username, content, up-/downvotes
 });
