@@ -154,7 +154,11 @@ export class RepositoryMongodb implements RepositoryInterface {
                 logger.error('Reached error on getUser');
                 result = new Result(err, undefined);
             } else {
-                result = new Result(undefined, new User(res[0].get('username'), res[0].get('email'), res[0].get('password')));
+                if (res[0]) {
+                    result = new Result(undefined, new User(res[0].get('username'), res[0].get('email'), res[0].get('password')));
+                } else {
+                    result = new Result('Could not find user', undefined);
+                }
             }
         }).catch((err: any) => {
             logger.error('Caught error on getUser');

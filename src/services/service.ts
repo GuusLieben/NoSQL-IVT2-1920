@@ -3,7 +3,7 @@ export const mongoose = require('mongoose');
 export const neo = require('neo4j-driver').v1;
 
 // == TS style imported packages
-import {app, logger} from '../app';
+import {app, logger, prod} from '../app';
 import environment from '../environment';
 import {Connection} from 'mongoose';
 import {queries} from './queries.neo4j';
@@ -21,19 +21,31 @@ export const neo4JDriver = neo.driver(environment.database.neo4j.uri,
         environment.database.neo4j.password
     ));
 
-export async function init() {
+export async function init(): Promise<void> {
     logger.color('yellow').log('⚠️ Initiating application service');
 
     // Either emits 'error' which logs the error and closes the server
     // Or emits 'open' which emits 'mongoConnected' to Express
-    await mongoose.connect(environment.database.mongo.uri, {
-        auth: {
-            user: environment.database.mongo.user,
-            password: environment.database.mongo.password
-        },
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
+    if (prod) {
+        await mongoose.connect(environment.database.mongo.uri, {
+            auth: {
+                user: environment.database.mongo.user,
+                password: environment.database.mongo.password
+            },
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+    } else {
+        await mongoose.connect(environment.test.mongo.uri, {
+            auth: {
+                user: environment.test.mongo.user,
+                password: environment.test.mongo.password
+            },
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+    }
+
     this.mongoDb = mongoose.connection;
 
     // Error handle, end the process if we can't connect
@@ -84,5 +96,6 @@ app.on('mongoConnected', async () => {
 
 // Once all databases responded, start listening for client requests
 app.on('neo4jConnected', () => app.listen(port, () => {
+    logger.info('Production : ' + prod);
     logger.color('yellow').log('⚠️ Application started on port ' + port);
 }));

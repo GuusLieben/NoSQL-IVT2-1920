@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "ts-node src/app.ts",
-    "test": "mocha --require ts-node/register --watch-extensions ts,tsx \"test/**/*.{ts,tsx}\" --watch"
+    "test": "mocha --require ts-node/register --watch-extensions ts,tsx \"test/**/*.{ts,tsx}\" --watch --timeout 4500 --exit"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

@@ -8,6 +8,10 @@ export const logger = require('node-color-log');
 
 // Exports
 export const app: Application = express();
+export let prod = true;
+export function setProduction(stat: boolean) {
+    prod = stat;
+}
 
 // General configuration
 app.use(bodyParser.json());
