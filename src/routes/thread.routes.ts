@@ -1,5 +1,7 @@
 import * as express from 'express';
-const router = express.Router();
+import {logger} from "../app";
+export const router = express.Router();
+const controller = require('../controllers/controllers.bin').threadController;
 
 // #MongoDB
 
