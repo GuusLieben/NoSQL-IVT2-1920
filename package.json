@@ -25,6 +25,9 @@
     "@types/mongoose": "^5.5.31",
     "@types/morgan": "^1.7.37",
     "@types/neo4j": "^2.0.2",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^6.2.2",
     "nodemon": "^1.19.4"
   }
 }

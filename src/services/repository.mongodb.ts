@@ -211,4 +211,10 @@ export class RepositoryMongodb implements RepositoryInterface {
 
         return result;
     }
+
+    async postCommentOnComment(threadId: Object, username: string, content: string,): Promise<Result> {
+        let result = new Result(undefined, false);
+
+        return result;
+    }
 }

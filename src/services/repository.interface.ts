@@ -9,6 +9,7 @@ export interface RepositoryInterface {
     deleteComment(commentId: Object): Promise<Result>,
     getCommentsForThread(threadId: Object): Promise<Result>,
     getComment(commentId: Object): Promise<Result>,
+    postCommentOnComment(threadId: Object, username: string, content: string): Promise<Result>,
 
     // Friends
     createFriends(username1: string, username2: string): Promise<Result>,

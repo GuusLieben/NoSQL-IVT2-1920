@@ -80,3 +80,19 @@ export async function downvoteComment(req: any, res: any) {
         logger.color('green').debug('> downvoteComment was successful');
     }
 }
+
+export async function postCommentOnComment(req: any, res: any) {
+    logger.debug('> postCommentOnComment was called')
+    const threadId = req.params.id;
+    const username = req.body.username;
+    const content = req.body.content;
+    const result = await mongoRepository.postCommentOnComment(threadId, username, content);
+
+    if (result.error) {
+        res.status(500).json({err: result.error});
+        logger.color('red').debug('> postCommentOnComment went wrong!');
+    } else {
+        res.status(200).json({result: result.result});
+        logger.color('green').debug('> postCommentOnComment was successful');
+    }
+}
