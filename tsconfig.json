@@ -9,9 +9,15 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "lib": ["es6"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "outDir": "out",
+    "moduleResolution": "classic"
   },
   "exclude": [
     "client/node_modules"
+  ],
+  "filesGlob": [
+    "./**/*.ts",
+    "!./node_modules/**/*.ts"
   ]
 }

@@ -46,3 +46,5 @@ app.use((err: any, req: any, res: any, next: any) => {
 // Initiate database and application services
 const service = require('./services/service');
 service.init();
+
+export const testable = app;
