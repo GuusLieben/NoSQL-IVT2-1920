@@ -1,10 +1,13 @@
-export class Result<T> {
-    err: any;
-    res: T;
+export class Result {
 
+    constructor(private readonly err: any, private readonly res: any) {
+    }
 
-    constructor(err: any, res: T) {
-        this.err = err;
-        this.res = res;
+    get error(): any {
+        return this.err;
+    }
+
+    get result(): any {
+        return this.res;
     }
 }

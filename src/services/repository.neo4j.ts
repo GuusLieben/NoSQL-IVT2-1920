@@ -9,47 +9,55 @@ import {Comment} from "../models/comment";
 
 export class RepositoryNeo4j implements RepositoryInterface {
 
-    async createFriends(user1: User, user2: User): Promise<Result<Boolean>> {
+    async createFriends(user1: User, user2: User): Promise<Result> {
         const session = neo4JDriver.session();
 
         await session.run(queries.createFriends(user1, user2))
-            .catch(function (error: any) {
-                logger.error(error);
-                session.close();
-                return new Result<Boolean>(error, false);
-            });
-        session.close();
-        return new Result<Boolean>(undefined, true);
-    }
-
-    async getFriends(username: String): Promise<Result<string[]>> {
-        const session = neo4JDriver.session();
-
-        return await session.run(queries.getFriends(username))
-            .then((result: any) => {
-                session.close();
-                console.log('The records are ' + JSON.stringify(result.records));
-                return new Result<string[]>(undefined, result.records);
+            .then((result: { records: any[]; }) => {
+                result.records.forEach(async record => {
+                    logger.color('blue').log(record);
+                })
             })
             .catch(function (error: any) {
                 logger.error(error);
                 session.close();
-                return new Result<Boolean>(error, false);
+                return new Result(error, false);
             });
+        session.close();
+        return new Result(undefined, true);
     }
 
-    async deleteFriends(user1: User, user2: User): Promise<Result<any>> {
+    async getFriends(username: String): Promise<Result> {
+        const session = neo4JDriver.session();
+
+        await session.run(queries.getFriends(username))
+            .then((result: any) => {
+                session.close();
+                return new Result(undefined, result.records);
+            })
+            .catch(function (error: any) {
+                logger.error(error);
+                session.close();
+                return new Result(error, false);
+            });
+
+        session.close();
+        return new Result(undefined, []);
+    }
+
+    async deleteFriends(user1: User, user2: User): Promise<Result> {
         const session = neo4JDriver.session();
 
         await session.run(queries.deleteFriendsRelationship(user1, user2))
             .then(async (result: any) => {
 
                 const deleteNodeSession = neo4JDriver.session();
-
-                await deleteNodeSession.run(queries.deleteFriendlessNodes(user1, user2))
+                // TODO : Delete only user1/2 if no friends left
+                // Do not loop all users (growth impact)
+                await deleteNodeSession.run(queries.deleteFriendsNodes)
                     .catch(function (error: any) {
                         logger.error(error);
-                        return new Result<Boolean>(error, false);
+                        return new Result(error, false);
                     });
                 deleteNodeSession.close();
 
@@ -57,61 +65,61 @@ export class RepositoryNeo4j implements RepositoryInterface {
             .catch(function (error: any) {
                 logger.error(error);
                 session.close();
-                return new Result<Boolean>(error, false);
+                return new Result(error, false);
             });
         session.close();
-        return new Result<Boolean>(undefined, true);
+        return new Result(undefined, true);
     }
 
-    createThread(user: User, title: String, content: String): Promise<Result<Boolean>> {
+    createThread(username: String, title: String, content: String): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 
-    createUser(username: String, password: String): Promise<Result<Boolean>> {
+    createUser(username: String, password: String): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 
-    deleteComment(commentId: Object): Promise<Result<Boolean>> {
+    deleteComment(commentId: Object): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 
-    deleteThread(threadId: Object): Promise<Result<Boolean>> {
+    deleteThread(threadId: Object): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 
-    deleteUser(username: String, password: String): Promise<Result<Boolean>> {
+    deleteUser(username: String, password: String): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 
-    getComment(commentId: Object): Promise<Result<Comment>> {
+    getComment(commentId: Object): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 
-    getCommentsForThread(threadId: Object): Promise<Result<Array<Comment>>> {
+    getCommentsForThread(threadId: Object): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 
-    getThread(threadId: Object): Promise<Result<Thread>> {
+    getThread(threadId: Object): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 
-    getThreads(): Promise<Result<Array<Thread>>> {
+    getThreads(): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 
-    getUser(username: String): Promise<Result<User>> {
+    getUser(username: String): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 
-    postComment(threadId: Object): Promise<Result<Boolean>> {
+    postComment(threadId: Object): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 
-    updateThread(threadId: Object, content: String): Promise<Result<Boolean>> {
+    updateThread(threadId: Object, content: String): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 
-    updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result<Boolean>> {
+    updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result> {
         throw 'Method not implemented in Neo4J';
     }
 }

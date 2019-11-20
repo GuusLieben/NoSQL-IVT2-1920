@@ -5,26 +5,26 @@ import {Result} from '../models/result';
 
 export interface RepositoryInterface {
     // Comments
-    postComment(threadId: Object): Promise<Result<Boolean>>,
-    deleteComment(commentId: Object): Promise<Result<Boolean>>,
-    getCommentsForThread(threadId: Object): Promise<Result<Array<Comment>>>,
-    getComment(commentId: Object): Promise<Result<Comment>>,
+    postComment(threadId: Object): Promise<Result>,
+    deleteComment(commentId: Object): Promise<Result>,
+    getCommentsForThread(threadId: Object): Promise<Result>,
+    getComment(commentId: Object): Promise<Result>,
 
     // Friends
-    createFriends(user1: User, user2: User): Promise<Result<Boolean>>,
-    deleteFriends(user1: User, user2: User): Promise<Result<any>>,
-    getFriends(username: String): Promise<Result<string[]>>,
+    createFriends(user1: User, user2: User): Promise<Result>,
+    deleteFriends(user1: User, user2: User): Promise<Result>,
+    getFriends(username: String): Promise<Result>,
 
     // Threads
-    createThread(user: User, title: String, content: String): Promise<Result<Boolean>>,
-    updateThread(threadId: Object, content: String): Promise<Result<Boolean>>,
-    deleteThread(threadId: Object): Promise<Result<Boolean>>,
-    getThreads(): Promise<Result<Array<Thread>>>,
-    getThread(threadId: Object): Promise<Result<Thread>>,
+    createThread(username: String, title: String, content: String): Promise<Result>,
+    updateThread(threadId: Object, content: String): Promise<Result>,
+    deleteThread(threadId: Object): Promise<Result>,
+    getThreads(): Promise<Result>,
+    getThread(threadId: Object): Promise<Result>,
     
     // Users
-    createUser(username: String, password: String): Promise<Result<Boolean>>,
-    updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result<Boolean>>,
-    deleteUser(username: String, password: String): Promise<Result<Boolean>>,
-    getUser(username: String): Promise<Result<User>>
+    createUser(username: String, email: String, password: String): Promise<Result>,
+    updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result>,
+    deleteUser(username: String, password: String): Promise<Result>,
+    getUser(username: String): Promise<Result>
 }
