@@ -18,10 +18,13 @@ export const port = process.env.PORT || environment.app.port || 5000;
 export let mongoDb: Connection;
 
 // == NodeJS style imported packages
-const mongoose = require('mongoose');
+export const mongoose = require('mongoose');
 export const neo = require('neo4j-driver').v1;
 export const neo4JDriver = neo.driver(environment.database.neo4j.uri,
-    neo.auth.basic(environment.database.neo4j.user, environment.database.neo4j.password));
+    neo.auth.basic(
+        environment.database.neo4j.user,
+        environment.database.neo4j.password
+    ));
 
 export async function init() {
     logger.color('yellow').log('⚠️ Initiating application service');

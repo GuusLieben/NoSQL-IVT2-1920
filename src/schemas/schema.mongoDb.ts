@@ -1,25 +1,26 @@
-const mongo = require('mongoose');
-const Schema = mongo.Schema;
+import {mongoose} from '../services/service';
+
+const Schema = mongoose.Schema;
 
 const User = new Schema({
     email: {type: String, required: true, unique: true},
     username: {type: String, required: true, unique: true},
     password: {type: String, required: true}
 });
-export const UserModel = mongo.model('User', User);
+export const UserModel = mongoose.model('User', User);
 
 const Thread = new Schema({
-    user: {type: mongo.Schema.ObjectId, ref: 'User', required: true},
+    user: {type: mongoose.Schema.ObjectId, ref: 'User', required: true},
     title: {type: String, required: true},
     content: {type: String, required: true},
-    upvotedBy: {type: [{type: mongo.Schema.ObjectId, ref: 'User'}], default: []},
-    downvotedBy: {type: [{type: mongo.Schema.ObjectId, ref: 'User'}], default: []},
+    upvotedBy: {type: [{type: mongoose.Schema.ObjectId, ref: 'User'}], default: []},
+    downvotedBy: {type: [{type: mongoose.Schema.ObjectId, ref: 'User'}], default: []},
     totalVotes: Number
 });
 Thread.virtual('totalVotes').get(function () {
     return this.upvotedBy.length - this.downvotedBy.length;
 });
-export const ThreadModel = mongo.model('Thread', Thread);
+export const ThreadModel = mongoose.model('Thread', Thread);
 
 const Comment = new Schema({
     user: {type: User, required: true},
@@ -27,4 +28,4 @@ const Comment = new Schema({
     thread: {type: Thread},
     comment: {type: this}
 });
-export const CommentModel = mongo.model('Comment', Comment);
+export const CommentModel = mongoose.model('Comment', Comment);
