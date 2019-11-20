@@ -6,36 +6,40 @@ const commentController = require('../controllers/controllers.bin').commentContr
 
 // #MongoDB
 
-router.post('/', (req, res, next) => {
+router.post('/', (req, res) => {
     // Username, title, content (no markup)
+    threadController.createThread(req, res);
 });
 
-router.put('/:id/', (req, res, next) => {
+router.put('/:id/', (req, res) => {
     // New content
     // Error title update : 406 (Not Acceptable)
+    threadController.updateThread(req, res);
 });
 
-router.post('/:id/comments/', (req, res, next) => {
+router.post('/:id/comments/', (req, res) => {
     commentController.postComment(req, res);
 });
 
-router.get('/:id/comments/', (req, res, next) => {
+router.get('/:id/comments/', (req, res) => {
     // Get by thread Id
     // Username, content, up-/downvotes
 });
 
-router.delete('/:id/', (req, res, next) => {
+router.delete('/:id/', (req, res) => {
     // Also delete comments/up-/downvotes
+    threadController.deleteThread(req, res);
 });
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
     // Return Id, Title, Username, Content, Total up-/downvotes
     // No comments
-    // TODO : Kick a teacher, sep. API?
+    threadController.getThreads(req, res);
 });
 
-router.get('/:id/', (req, res, next) => {
+router.get('/:id/', (req, res) => {
     // Return Id, Title, Username, Content, Total up-/downvotes
     // Full comments (comment controller)
+    threadController.getThread(req, res);
 });
 
