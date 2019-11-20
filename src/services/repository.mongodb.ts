@@ -240,14 +240,28 @@ export class RepositoryMongodb implements RepositoryInterface {
 
     async updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result> {
         let result = new Result(undefined, false);
-
-        await ThreadModel.find({username: username}, (err: any, res: Document[]) => {
+        let password;
+        await UserModel.find({username: username}, (err: any, res: Document[]) => {
             if (err) {
                 result = new Result(err, false);
             } else {
-                result = new Result(undefined, true);
+                if (res[0]) {
+                    password = res[0].get('password');
+                }
             }
         });
+
+        if (password == oldPassword) {
+            await UserModel.update({username: username}, {password: newPassword}, (err: any, res: any) => {
+                if (err) {
+                    result = new Result(err, false);
+                } else {
+                    result = new Result(undefined, true);
+                }
+            });
+        } else {
+            result = new Result('Passwords did not match', false);
+        }
 
         return result;
     }
