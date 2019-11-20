@@ -1,76 +1,74 @@
 import {RepositoryInterface} from './repository.interface';
-import {Types} from 'mongoose';
 import {User} from '../models/user';
 import {Result} from '../models/result';
-import {Comment} from '../models/comment';
-import {Friends} from '../models/friends';
-import {Thread} from '../models/thread';
-import ObjectId = Types.ObjectId;
+import {Comment} from "../models/comment";
+import {Thread} from "../models/thread";
 
 export class RepositoryMongodb implements RepositoryInterface {
 
     createFriends(user1: User, user2: User): Promise<Result<Boolean>> {
-        throw new Error('Method not implemented.');
-    }
-
-    createThread(user: User, title: String, content: String): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
-
-    createUser(username: String, password: String): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
-
-    deleteComment(commentId: ObjectId): Result<Boolean> {
-        throw 'Unsupported operation';
+        throw 'Method not implemented in MongoDB';
     }
 
     deleteFriends(user1: User, user2: User): Promise<Result<Boolean>> {
-        throw new Error('Method not implemented.');
-    }
-
-    deleteThread(threadId: ObjectId): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
-
-    deleteUser(username: String, password: String): Result<Boolean> {
-        throw 'Unsupported operation';
-    }
-
-    getComment(commentId: ObjectId): Result<Comment> {
-        throw 'Unsupported operation';
-    }
-
-    getCommentsForThread(threadId: ObjectId): Result<Array<Comment>> {
-        throw 'Unsupported operation';
+        throw 'Method not implemented in MongoDB';
     }
 
     getFriends(username: String): Promise<Result<string[]>> {
-        throw new Error('Method not implemented.');
+        throw 'Method not implemented in MongoDB';
     }
 
-    getThread(threadId: ObjectId): Result<Thread> {
+    createThread(user: User, title: String, content: String): Promise<Result<Boolean>> {
         throw 'Unsupported operation';
     }
 
-    getThreads(): Result<Array<Thread>> {
+    createUser(username: String, password: String): Promise<Result<Boolean>> {
         throw 'Unsupported operation';
     }
 
-    getUser(username: String): Result<User> {
+    deleteComment(commentId: Object): Promise<Result<Boolean>> {
         throw 'Unsupported operation';
     }
 
-    postComment(threadId: ObjectId): Result<Boolean> {
+    deleteThread(threadId: Object): Promise<Result<Boolean>> {
         throw 'Unsupported operation';
     }
 
-    updateThread(threadId: ObjectId, content: String): Result<Boolean> {
+    deleteUser(username: String, password: String): Promise<Result<Boolean>> {
         throw 'Unsupported operation';
     }
 
-    updateUser(username: String, oldPassword: String, newPassword: String): Result<Boolean> {
+    getComment(commentId: Object): Promise<Result<Comment>> {
         throw 'Unsupported operation';
     }
+
+    getCommentsForThread(threadId: Object): Promise<Result<Array<Comment>>> {
+        throw 'Unsupported operation';
+    }
+
+    getThread(threadId: Object): Promise<Result<Thread>> {
+        throw 'Unsupported operation';
+    }
+
+    getThreads(): Promise<Result<Array<Thread>>> {
+        throw 'Unsupported operation';
+    }
+
+    getUser(username: String): Promise<Result<User>> {
+        throw 'Unsupported operation';
+    }
+
+    postComment(threadId: Object): Promise<Result<Boolean>> {
+        throw 'Unsupported operation';
+    }
+
+    updateThread(threadId: Object, content: String): Promise<Result<Boolean>> {
+        throw 'Unsupported operation';
+    }
+
+    updateUser(username: String, oldPassword: String, newPassword: String): Promise<Result<Boolean>> {
+        throw 'Unsupported operation';
+    }
+
 
 }
