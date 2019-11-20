@@ -1,7 +1,8 @@
 import * as express from 'express';
 import {logger} from "../app";
 export const router = express.Router();
-const controller = require('../controllers/controllers.bin').threadController;
+const threadController = require('../controllers/controllers.bin').threadController;
+const commentController = require('../controllers/controllers.bin').commentController;
 
 // #MongoDB
 
@@ -15,9 +16,7 @@ router.put('/:id/', (req, res, next) => {
 });
 
 router.post('/:id/comments/', (req, res, next) => {
-    // If thread not exist : error
-    // Content, username, threadId
-    //
+    commentController.postComment(req, res);
 });
 
 router.get('/:id/comments/', (req, res, next) => {

@@ -18,4 +18,4 @@ export async function postComment (req: any, res: any) {
         res.status(200).json({result: result.result});
         logger.color('green').debug('> postComment was successful');
     }
-} 
+}

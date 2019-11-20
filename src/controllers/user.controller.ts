@@ -21,9 +21,17 @@ export async function getFriends(req: any, res: any) {
 
 // export async function createUser(req: any, res: any) {
 //         logger.debug('> createUser was called');
-//         const email = req.body;
-//         const username = req.body;
-//         const password = req.body;
-//         const result = await mongoRepository.createUser(username, email, password)
+//         const email = req.body.email;
+//         const username = req.body.username;
+//         const password = req.body.password;
+//         const result = await mongoRepository.createUser(username, email, password);
+//
+//     if (result.error) {
+//         res.status(500).json({err: result.error});
+//         logger.color('red').debug('> getFriends went wrong!');
+//     } else {
+//         res.status(200).json({result: result.result});
+//         logger.color('green').debug('> getFriends was successful');
+//     }
 //     }
 // }
