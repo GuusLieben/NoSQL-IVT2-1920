@@ -2,7 +2,6 @@ import {RepositoryInterface} from './repository.interface';
 import {User} from '../models/user';
 import {Result} from '../models/result';
 import {CommentModel, ThreadModel, UserModel} from "../schemas/schema.mongoDb";
-import {logger} from "../app";
 import {Document} from "mongoose";
 import {Comment} from "../models/comment";
 
@@ -35,9 +34,7 @@ export class RepositoryMongodb implements RepositoryInterface {
                 status: true,
                 thread: res.get('_id')
             });
-            logger.debug('Created Thread : ' + JSON.stringify(res));
         }).catch((err: any) => {
-            console.warn('Caught error on thread');
             result = new Result(err, false);
         });
 
@@ -51,10 +48,8 @@ export class RepositoryMongodb implements RepositoryInterface {
             username: username,
             password: password
         }).then((res: any) => {
-            logger.debug('Created User : ' + JSON.stringify(res));
             result = new Result(undefined, true);
         }).catch((err: any) => {
-            logger.error(err);
             result = new Result(err, false);
         });
         return result;
@@ -77,7 +72,6 @@ export class RepositoryMongodb implements RepositoryInterface {
         let passwordOkay = false;
         let failed = false;
         await UserModel.find({username: username}, (err: any, res: Document[]) => {
-            logger.info(JSON.stringify(res));
             if (res[0]) {
                 passwordOkay = (res[0].get('password') === password);
             } else {
@@ -128,11 +122,9 @@ export class RepositoryMongodb implements RepositoryInterface {
             if (err) {
                 result = new Result(err, undefined);
             } else {
-                logger.warn('Reached find');
                 result = new Result(undefined, res);
             }
         });
-        logger.warn('Reached end');
         return result;
     }
 
@@ -166,7 +158,6 @@ export class RepositoryMongodb implements RepositoryInterface {
         let result = new Result(undefined, undefined);
         await UserModel.find({username: username}, (err: any, res: Document[]) => {
             if (err) {
-                logger.error('Reached error on getUser');
                 result = new Result(err, undefined);
             } else {
                 if (res[0]) {
@@ -176,7 +167,6 @@ export class RepositoryMongodb implements RepositoryInterface {
                 }
             }
         }).catch((err: any) => {
-            logger.error('Caught error on getUser');
             result = new Result(err, undefined);
         });
         return result;
@@ -190,17 +180,14 @@ export class RepositoryMongodb implements RepositoryInterface {
             content: content,
             thread: threadId
         }).then((res: Document) => {
-            logger.info('Reached update');
             result = new Result(undefined, {
                 status: true,
                 comment: res.get('_id')
             })
         }).catch((err: any) => {
-            logger.error(err);
             result = new Result(err, false);
         });
 
-        logger.info('Reached end');
         return result;
     }
 
@@ -212,17 +199,14 @@ export class RepositoryMongodb implements RepositoryInterface {
             content: content,
             comment: threadId
         }).then((res: Document) => {
-            logger.info('Reached update');
             result = new Result(undefined, {
                 status: true,
                 comment: res.get('_id')
             })
         }).catch((err: any) => {
-            logger.error(err);
             result = new Result(err, false);
         });
 
-        logger.info('Reached end');
         return result;
     }
 
@@ -288,7 +272,6 @@ async function vote(threadId: Object, username: String, projection: any, field: 
         return new Result('You cannot upvote the same parent twice', false);
     } else {
         await ThreadModel.update({_id: threadId}, {$push: {upvotedBy: username}}).then((res: any) => {
-            logger.debug(JSON.stringify(res));
             result = new Result(undefined, true);
         }).catch((err: any) => {
             result = new Result(err, false);
