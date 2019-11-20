@@ -1,8 +1,10 @@
 import {RepositoryInterface} from "../services/repository.interface";
 import {RepositoryNeo4j} from "../services/repository.neo4j";
+import {RepositoryMongodb} from "../services/repository.mongodb";
 import {logger} from "../app";
 
 const friendRepository: RepositoryInterface = new RepositoryNeo4j();
+const mongoRepository: RepositoryInterface = new RepositoryMongodb();
 
 export async function getFriends(req: any, res: any) {
     logger.debug('> getFriends was called');
@@ -16,3 +18,12 @@ export async function getFriends(req: any, res: any) {
         logger.color('green').debug('> getFriends was successful');
     }
 }
+
+// export async function createUser(req: any, res: any) {
+//         logger.debug('> createUser was called');
+//         const email = req.body;
+//         const username = req.body;
+//         const password = req.body;
+//         const result = await mongoRepository.createUser(username, email, password)
+//     }
+// }
