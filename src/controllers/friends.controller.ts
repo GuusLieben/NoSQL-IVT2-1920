@@ -14,7 +14,7 @@ export default {
         const result = await friendRepository.createFriends(username1, username2);
         if (result.error) {
             res.status(500).json({err: result.error});
-            logger.color('red').debug('> createFriendship was called');
+            logger.color('red').debug('> createFriendship went wrong!');
         } else {
             res.status(200).json({result: result.result});
             logger.color('green').debug('> createFriendship was successful');
@@ -29,7 +29,7 @@ export default {
         const result = await friendRepository.deleteFriends(username1, username2);
         if (result.error) {
             res.status(500).json({err: result.error});
-            logger.color('red').debug('> deleteFriendship was called');
+            logger.color('red').debug('> deleteFriendship went wrong!');
         } else {
             res.status(200).json({result: result.result});
             logger.color('green').debug('> deleteFriendship was successful');

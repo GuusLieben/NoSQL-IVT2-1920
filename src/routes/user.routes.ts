@@ -1,5 +1,6 @@
 import * as express from 'express';
-const router = express.Router();
+export const router = express.Router();
+const controller = require('../controllers/controllers.bin').userController;
 
 // #MongoDB
 
@@ -8,8 +9,8 @@ router.get('/:username', (req, res, next) => {
 });
 
 // Ex.: localhost:3000/user/guuslieben/friends
-router.get('/:username/friends', (req, res, next) => {
-    // Return friends
+router.get('/:username/friends', (req, res) => {
+    controller.getFriends(req, res);
 });
 
 router.post('/', (req, res, next) => {
