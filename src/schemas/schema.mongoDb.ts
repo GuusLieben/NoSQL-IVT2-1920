@@ -2,14 +2,14 @@ import {mongoose} from '../services/service';
 
 const Schema = mongoose.Schema;
 
-const User = new Schema({
+export const User = new Schema({
     email: {type: String, required: true},
     username: {type: String, required: true, unique: true},
     password: {type: String, required: true}
 });
 export const UserModel = mongoose.model('User', User);
 
-const Thread = new Schema({
+export const Thread = new Schema({
     user: {type: String, required: true},
     title: {type: String, required: true},
     content: {type: String, required: true},
@@ -21,7 +21,7 @@ Thread.virtual('totalVotes').get(function () {
 });
 export const ThreadModel = mongoose.model('Thread', Thread);
 
-const Comment = new Schema({
+export const Comment = new Schema({
     user: {type: String, required: true},
     content: {type: String, required: true},
     thread: {type: mongoose.Schema.ObjectId, ref:'Thread'},
