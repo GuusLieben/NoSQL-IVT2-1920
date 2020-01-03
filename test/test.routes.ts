@@ -17,7 +17,7 @@ before((done: any) => {
     setTimeout(() => done(), 2500);
 });
 
-describe('createUser test', () => {
+describe('User Routes', () => {
     it('should create a new user', (done: any) => {
         chai.request(app)
             .post('/user')
@@ -34,7 +34,7 @@ describe('createUser test', () => {
     })
 });
 
-describe('getUser test', () => {
+describe('User Routes', () => {
     it('should return user Test', (done: any) => {
         chai.request(app)
             .get('/user/Test')
@@ -46,7 +46,7 @@ describe('getUser test', () => {
     });
 });
 
-describe('updateUser test', () => {
+describe('User Routes', () => {
     it('should update the created user', (done: any) => {
         chai.request(app)
             .put('/user/Test')
@@ -62,7 +62,7 @@ describe('updateUser test', () => {
     })
 });
 
-describe('deleteUser test', () => {
+describe('User Routes', () => {
     it('should delete the created user', (done: any) => {
         chai.request(app)
             .delete('/user/Test')
@@ -77,8 +77,8 @@ describe('deleteUser test', () => {
     })
 });
 
-describe('getFriends test', () => {
-    it('should return the friends', (done: any) => {
+describe('User Routes', () => {
+    it('should return the friends of a user', (done: any) => {
         chai.request(app)
             .get('/user/Arnold/friends')
             .end(function (err: any, res: any) {
