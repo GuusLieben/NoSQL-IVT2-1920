@@ -18,23 +18,6 @@ before((done: any) => {
 });
 
 describe('User Routes', () => {
-    it('should create a new user', (done: any) => {
-        chai.request(app)
-            .post('/user')
-            .send({
-                'email': 'test@gmail.com',
-                'username': 'Test',
-                'password': 'tester123'
-            })
-            .end(function (err: any, res: any) {
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-                done();
-            });
-    })
-});
-
-describe('User Routes', () => {
     it('should return user Test', (done: any) => {
         chai.request(app)
             .get('/user/Test')
@@ -44,22 +27,6 @@ describe('User Routes', () => {
                 done();
             });
     });
-});
-
-describe('User Routes', () => {
-    it('should update the created user', (done: any) => {
-        chai.request(app)
-            .put('/user/Test')
-            .send({
-                'oldPassword': 'tester123',
-                'newPassword': 'newpassword123'
-            })
-            .end(function(err: any, res: any) {
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-                done();
-            })
-    })
 });
 
 describe('User Routes', () => {
