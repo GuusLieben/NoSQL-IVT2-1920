@@ -1,7 +1,7 @@
 export class Comment {
-    user: Object;
+    user: any;
     content: String;
-    parent: Object;
+    parent: any;
 
     constructor(user: Object, content: String, parent: Object) {
         this.user = user;
